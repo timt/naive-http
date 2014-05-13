@@ -29,8 +29,4 @@ class FormParameterSpec extends Spec {
     assert(deserialize("a+question=what+is+%2420%2F5") === FormParameter("a question", "what is $20/5"))
   }
 
-
-
-  //urldecodes name and value when deserializing
-
 }

@@ -1,6 +1,6 @@
 package io.shaka.http
 
-import java.net.URLEncoder
+import java.net.{URLDecoder, URLEncoder}
 import java.nio.charset.Charset
 
 case class FormParameter(name: String, value: Option[String]) {
@@ -18,5 +18,13 @@ object FormParameter {
 
   private def encode(s: String) = URLEncoder.encode(s, Charset.forName("UTF-8").toString)
 
-  def deserialize(serializedFormParameter: String): FormParameter = ???
+  def deserialize(serializedFormParameter: String): FormParameter = if (serializedFormParameter.contains("=")) {
+    val pair = serializedFormParameter.split("=")
+    FormParameter(decode(pair(0)), Some(decode(pair(1))))
+  } else {
+    FormParameter(decode(serializedFormParameter))
+  }
+
+  private def decode(s: String) = URLDecoder.decode(s, Charset.forName("UTF-8").toString)
+
 }

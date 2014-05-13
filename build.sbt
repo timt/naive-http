@@ -2,7 +2,7 @@ name := "http"
 
 organization := "io.shaka"
 
-version := "0.1"
+version := "2"
 
 scalaVersion := "2.10.4"
 

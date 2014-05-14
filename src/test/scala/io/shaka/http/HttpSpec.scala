@@ -6,6 +6,7 @@ import io.shaka.http.Status.OK
 import io.shaka.http.Request.{GET, POST}
 import io.shaka.http.HttpHeader.{CONTENT_TYPE, USER_AGENT}
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
+import io.shaka.http.FormParameters.FormParameters
 
 class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
 
@@ -35,6 +36,17 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     val response = http(POST(TestHttpServer.url + "echoPost").entity(content))
     assert(response.status === OK)
     assert(response.entity.get.toString === content)
+  }
+
+  def `can post form parameters`() {
+    val formParameters: FormParameters = List(FormParameter("name1", "some value"), FormParameter("name2"))
+    TestHttpServer.addAssert((req) => req.assertHeader(CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.value))
+    TestHttpServer.addAssert((req) => req.assertEntity("name1=some+value&name2"))
+
+    val response = http(POST(TestHttpServer.url + "echoPost")
+      .formParameters(formParameters))
+    assert(response.status === OK)
+    assert(response.entity.get.toString === "name1=some+value&name2")
   }
 
   override protected def beforeAll(): Unit = TestHttpServer.start()

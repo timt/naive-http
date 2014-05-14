@@ -13,7 +13,9 @@ object TestHttpServer {
 
   val getEcho = Planify {
     case req@unfiltered.request.GET(Path(Seg(p :: Nil))) =>
-      serverAsserts.foreach(_(RequestAssertions(req)))
+      req.headers("Content-Type").foreach(println)
+      val request = RequestAssertions(req)
+      serverAsserts.foreach(_(request))
       val statusAndHeaders = responseHeaderToAdd match {
         case Some(header) => Ok ~> header
         case _ => Ok
@@ -23,12 +25,14 @@ object TestHttpServer {
 
   val postEcho = Planify {
     case req@unfiltered.request.POST(Path(Seg("echoPost" :: Nil))) =>
-      serverAsserts.foreach(_(RequestAssertions(req)))
+      req.headers("Content-Type").foreach(println)
+      val request = RequestAssertions(req)
+      serverAsserts.foreach(_(request))
       val statusAndHeaders = responseHeaderToAdd match {
         case Some(header) => Ok ~> header
         case _ => Ok
       }
-      statusAndHeaders ~> ResponseString(Body.string(req))
+      statusAndHeaders ~> ResponseString(request.body)
 
   }
 

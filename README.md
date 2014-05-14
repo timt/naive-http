@@ -14,14 +14,17 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
 
-    libraryDependencies += "io.shaka" %% "http" % "1"
+    libraryDependencies += "io.shaka" %% "http" % "4"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
     ...
     val response = http(GET("http://www.google.com"))
     ...
-    val postResponse = http(POST("http://some/json/server").entity("""{"foo":"bar"}"""))
+    val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}"""))
+    ...
+    //Post form parameters
+    val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
 
 For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 

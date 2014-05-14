@@ -2,7 +2,6 @@ package io.shaka.http
 
 import io.shaka.http.Http._
 import scala.Some
-import io.shaka.http.FormParameters.FormParameters
 import io.shaka.http.HttpHeader.CONTENT_TYPE
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 
@@ -13,7 +12,7 @@ object Request {
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Map(), entity: Option[Entity] = None) {
-  def formParameters(parameters: FormParameters): Request = {
+  def formParameters(parameters: FormParameter*): Request = {
     val existingFormParameters = entity.map(FormParameters.fromEntity).getOrElse(List())
     copy(
       entity = Some(FormParameters.toEntity(existingFormParameters ++ parameters)),

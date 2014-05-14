@@ -44,7 +44,7 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     TestHttpServer.addAssert((req) => req.assertEntity("name1=some+value&name2"))
 
     val response = http(POST(TestHttpServer.url + "echoPost")
-      .formParameters(formParameters))
+      .formParameters(formParameters:_*))
     assert(response.status === OK)
     assert(response.entity.get.toString === "name1=some+value&name2")
   }

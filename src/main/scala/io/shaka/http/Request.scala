@@ -23,6 +23,8 @@ case class Request(method: Method, url: Url, headers: Headers = Map(), entity: O
 
   def header(header: HttpHeader, value: String): Request = copy(headers = headers + (header -> value))
 
+  def contentType(value: String) = header(CONTENT_TYPE, value)
+
   def entity(content: String) = copy(entity = Some(Entity(content)))
 }
 

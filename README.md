@@ -14,14 +14,20 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
 
-    libraryDependencies += "io.shaka" %% "http" % "4"
+    libraryDependencies += "io.shaka" %% "http" % "5"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
     ...
     val response = http(GET("http://www.google.com"))
     ...
-    val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}"""))
+    //Add header
+    import io.shaka.http.HttpHeader.USER_AGENT
+    val response = http(GET("http://www.google.com").header(USER_AGENT,"my agent"))
+    ...
+    //Post JSON
+    import io.shaka.http.ContentType.APPLICATION_JSON
+    val response = http(POST("http://some/json/server").contentType(APPLICATION_JSON).entity("""{"foo":"bar"}"""))
     ...
     //Post form parameters
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))

@@ -1,4 +1,4 @@
-http
+http  [![Build Status](https://travis-ci.org/timt/http.png?branch=master)](https://travis-ci.org/timt/http)
 ----
 A really simple http client library implemented in scala with no dependencies
 
@@ -14,7 +14,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
 
-    libraryDependencies += "io.shaka" %% "http" % "5"
+    libraryDependencies += "io.shaka" %% "http" % "6"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
@@ -33,6 +33,9 @@ Add the following lines to your build.sbt
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
 
 For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
+
+See [https://travis-ci.org/timt/json](https://travis-ci.org/timt/http) for latest released version number
+
 
 Code license
 ------------

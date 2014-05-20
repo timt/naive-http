@@ -1,6 +1,6 @@
 import scala.util.Try
 
-name := "http"
+name := "naive-http"
 
 organization := "io.shaka"
 

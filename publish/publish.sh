@@ -8,7 +8,7 @@ if [ "$TRAVIS_REPO_SLUG" == "timt/json" ] && [ "$TRAVIS_PULL_REQUEST" == "false"
     cp -R releases/ timt.github.com/repo/
     cd timt.github.com
     git add -f .
-    git commit -m "Lastest http lib on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to repo"
+    git commit -m "Lastest naive-http lib on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to repo"
     git push -fq origin master > /dev/null
-    echo -e "Published http lib to repo.\n"
+    echo -e "Published naive-http lib to repo.\n"
 fi

@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_REPO_SLUG" == "timt/json" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "timt/naive-http" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     cd $TRAVIS_BUILD_DIR/publish
 
     git config --global user.email "travis@travis-ci.org"

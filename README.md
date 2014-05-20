@@ -14,7 +14,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
 
-    libraryDependencies += "io.shaka" %% "http" % "6"
+    libraryDependencies += "io.shaka" %% "naive-http" % "3"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}

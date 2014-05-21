@@ -5,7 +5,7 @@
    - oraclejdk7
  env:
    global:
-     - secure: hlK4HAq3CGCJioDT9HulnTFWUW65B4UbJNmW90of/xl2KGXtBNeYdYEeHysldjXFicDLcncYEMKqD6JmsFlz1l/fZHlVaEP3rLWbseA9jsH+tgS2Wi+Gkp+n9yDSaqcgDRdie5rwKrcFxD13b1XbKNh4IYEAtC4JbD4vLpWJuKc=
+     - secure: NQ6OAT29oas9+H/9xvb4w/D/5/pczRXCNeBxIr9GQV1SEnKmwgu/RQfe+H31TWnvS9GZ6TbyPRctD1DI0smOFz294h18uuijOI02tJby0EGGyWZakHF5VAdQX0JwvEPHT0HgB0hi3nsSahDnLAwV/Dzm1SZ8h+Ez9ct1AVo/v+A=
      - LIB_VERSION=$TRAVIS_BUILD_NUMBER
  before_script:
    - echo "$TRAVIS_SECURE_ENV_VARS"

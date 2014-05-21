@@ -14,7 +14,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "3"
+    libraryDependencies += "io.shaka" %% "naive-http" % "13"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
@@ -31,6 +31,10 @@ Add the following lines to your build.sbt
     ...
     //Post form parameters
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
+    ...
+    //Trust all SSL certificates
+    import io.shaka.http.TrustAllSslCertificates
+    TrustAllSslCertificates
 
 For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 

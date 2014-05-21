@@ -13,5 +13,5 @@
    - echo "$TRAVIS_BRANCH"
    - echo "$TRAVIS_COMMIT"
    - echo "$TRAVIS_REPO_SLUG"
-   script: sbt test publish
+ script: sbt test publish
  after_success: ./publish/publish.sh

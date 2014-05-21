@@ -3,7 +3,10 @@
    - "2.10.4"
  jdk:
    - oraclejdk7
- secure: hlK4HAq3CGCJioDT9HulnTFWUW65B4UbJNmW90of/xl2KGXtBNeYdYEeHysldjXFicDLcncYEMKqD6JmsFlz1l/fZHlVaEP3rLWbseA9jsH+tgS2Wi+Gkp+n9yDSaqcgDRdie5rwKrcFxD13b1XbKNh4IYEAtC4JbD4vLpWJuKc=
+ env:
+   global:
+     - secure: hlK4HAq3CGCJioDT9HulnTFWUW65B4UbJNmW90of/xl2KGXtBNeYdYEeHysldjXFicDLcncYEMKqD6JmsFlz1l/fZHlVaEP3rLWbseA9jsH+tgS2Wi+Gkp+n9yDSaqcgDRdie5rwKrcFxD13b1XbKNh4IYEAtC4JbD4vLpWJuKc=
+     - LIB_VERSION=$TRAVIS_BUILD_NUMBER
  before_script:
    - echo "$TRAVIS_SECURE_ENV_VARS"
    - echo "$TRAVIS_PULL_REQUEST"

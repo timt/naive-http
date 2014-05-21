@@ -3,7 +3,9 @@
    - "2.10.4"
  jdk:
    - oraclejdk7
- env: LIB_VERSION=$TRAVIS_BUILD_NUMBER
- secure: UNV8j0ltEHA/uWugQOH38ER+Ky9hjCjm0tFvg0B9AUHAmpoHZPYhSKStjrHZz/WMI0b2MnNgtktbdvC92bDvkTBtrlFM89/ZkmaDNLvO6NFv+MSleu4xf848opsVyz7uYcZ7uStUi86MvwCeiU4SrB3uK+E4af19elWWi++x10c=
+ env:
+   global:
+     - LIB_VERSION=$TRAVIS_BUILD_NUMBER
+     - secure: "hlK4HAq3CGCJioDT9HulnTFWUW65B4UbJNmW90of/xl2KGXtBNeYdYEeHysldjXFicDLcncYEMKqD6JmsFlz1l/fZHlVaEP3rLWbseA9jsH+tgS2Wi+Gkp+n9yDSaqcgDRdie5rwKrcFxD13b1XbKNh4IYEAtC4JbD4vLpWJuKc="
  script: sbt test publish
  after_success: ./publish/publish.sh

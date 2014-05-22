@@ -26,6 +26,8 @@ case class Request(method: Method, url: Url, headers: Headers = List(), entity: 
 
   def contentType(value: String) = header(CONTENT_TYPE, value)
 
+  def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
+
   def entity(content: String) = copy(entity = Some(Entity(content)))
 }
 

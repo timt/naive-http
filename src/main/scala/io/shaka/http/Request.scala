@@ -1,9 +1,10 @@
 package io.shaka.http
 
 import io.shaka.http.Http._
-import scala.Some
 import io.shaka.http.HttpHeader.CONTENT_TYPE
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
+import io.shaka.http.FormParameters.{fromEntity, toEntity}
+import scala.Some
 
 object Request {
   def POST(url: Url) = Request(Method.POST, url)
@@ -11,17 +12,17 @@ object Request {
   def GET(url: Url) = Request(Method.GET, url)
 }
 
-case class Request(method: Method, url: Url, headers: Headers = Map(), entity: Option[Entity] = None) {
+case class Request(method: Method, url: Url, headers: Headers = List(), entity: Option[Entity] = None) {
   def formParameters(parameters: FormParameter*): Request = {
-    val existingFormParameters = entity.map(FormParameters.fromEntity).getOrElse(List())
+    val existingFormParameters = entity.fold(List[FormParameter]())(fromEntity)
     copy(
-      entity = Some(FormParameters.toEntity(existingFormParameters ++ parameters)),
-      headers = headers + (CONTENT_TYPE -> APPLICATION_FORM_URLENCODED.value)
+      entity = Some(toEntity(existingFormParameters ++ parameters)),
+      headers = (CONTENT_TYPE -> APPLICATION_FORM_URLENCODED.value) :: headers
     )
   }
 
 
-  def header(header: HttpHeader, value: String): Request = copy(headers = headers + (header -> value))
+  def header(header: HttpHeader, value: String): Request = copy(headers = (header, value) :: headers)
 
   def contentType(value: String) = header(CONTENT_TYPE, value)
 

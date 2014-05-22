@@ -30,7 +30,7 @@ class ClientHttpHandler extends HttpHandler {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
     val is = if(s.code >=400) connection.getErrorStream else connection.getInputStream
     val entity = Entity(Source.fromInputStream(is).map(_.toByte).toArray)
-    val headers: Map[HttpHeader, String] = connection.getHeaderFields.map(pair => (httpHeader(pair._1), pair._2.head)).toMap
+    val headers = connection.getHeaderFields.toList.flatMap(pair => pair._2.map((httpHeader(pair._1), _)))
 
     Response(
       status = s,

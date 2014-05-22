@@ -27,8 +27,8 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     val userAgent = "mytest-agent"
     TestHttpServer.addResponseHeader(CONTENT_TYPE, APPLICATION_ATOM_XML.value)
     val response = http(GET(TestHttpServer.url + "withHeaders").header(USER_AGENT, userAgent))
-    assert(response.headers.contains(CONTENT_TYPE))
-    assert(response.headers(CONTENT_TYPE) === APPLICATION_ATOM_XML.value)
+    assert(response.headers.exists(_._1 == CONTENT_TYPE))
+    assert(response.headers.find(_._1 == CONTENT_TYPE).headOption.map(_._2) === Some(APPLICATION_ATOM_XML.value))
   }
 
   def `post something works`() {

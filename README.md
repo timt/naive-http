@@ -1,5 +1,5 @@
-http  [![Build Status](https://travis-ci.org/timt/http.png?branch=master)](https://travis-ci.org/timt/http)
-----
+http  [![Build Status](https://travis-ci.org/timt/naive-http.png?branch=master)](https://travis-ci.org/timt/naive-http)
+====
 A really simple http client library implemented in scala with no dependencies
 
 

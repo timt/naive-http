@@ -3,4 +3,5 @@
 target
 todo.txt
 publish/releases
+publish/gpg
 bin

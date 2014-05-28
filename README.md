@@ -7,6 +7,7 @@ Requirements
 ------------
 
 * [scala](http://www.scala-lang.org) 2.10.4
+* [scala](http://www.scala-lang.org) 2.11.0
 
 Usage
 -----
@@ -14,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "18"
+    libraryDependencies += "io.shaka" %% "naive-http" % "21"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}

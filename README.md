@@ -12,9 +12,9 @@ Usage
 -----
 Add the following lines to your build.sbt
 
-    resolvers += "Tim Tennant's repo" at "http://timt.github.com/repo/releases/"
+    resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "13"
+    libraryDependencies += "io.shaka" %% "naive-http" % "18"
 
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
@@ -38,7 +38,7 @@ Add the following lines to your build.sbt
 
 For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 
-See [https://travis-ci.org/timt/json](https://travis-ci.org/timt/http) for latest released version number
+See [timt/repo](http://dl.bintray.com/timt/repo/io/shaka/naive-html_2.10) for latest released version number
 
 
 Code license

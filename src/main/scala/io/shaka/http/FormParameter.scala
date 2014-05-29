@@ -3,8 +3,7 @@ package io.shaka.http
 import java.net.{URLDecoder, URLEncoder}
 import java.nio.charset.Charset
 
-case class FormParameter(name: String, value: Option[String]) {
-}
+case class FormParameter(name: String, value: Option[String])
 
 object FormParameter {
   def apply(name: String): FormParameter = FormParameter(name, None)

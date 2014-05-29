@@ -4,7 +4,7 @@ import org.scalatest.{BeforeAndAfterEach, BeforeAndAfterAll, Spec}
 import io.shaka.http.Http.http
 import io.shaka.http.Status.OK
 import io.shaka.http.Request.{GET, POST}
-import io.shaka.http.HttpHeader.{CONTENT_TYPE, USER_AGENT}
+import io.shaka.http.HttpHeader.{ETAG, CONTENT_TYPE, USER_AGENT}
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
 import io.shaka.http.FormParameters.FormParameters
 
@@ -27,8 +27,16 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     val userAgent = "mytest-agent"
     TestHttpServer.addResponseHeader(CONTENT_TYPE, APPLICATION_ATOM_XML.value)
     val response = http(GET(TestHttpServer.url + "withHeaders").header(USER_AGENT, userAgent))
-    assert(response.headers.exists(_._1 == CONTENT_TYPE))
-    assert(response.headers.find(_._1 == CONTENT_TYPE).headOption.map(_._2) === Some(APPLICATION_ATOM_XML.value))
+    assert(response.headers.contains(CONTENT_TYPE))
+    assert(response.headers(CONTENT_TYPE) === List(APPLICATION_ATOM_XML.value))
+  }
+
+  def `response gets headers with many values`() {
+    val userAgent = "mytest-agent"
+    TestHttpServer.addResponseHeader(ETAG, "sheep")
+    TestHttpServer.addResponseHeader(ETAG, "cheese")
+    val response = http(GET(TestHttpServer.url + "withHeaders").header(USER_AGENT, userAgent))
+    assert(response.headers(ETAG) === List("sheep", "cheese"))
   }
 
   def `post something works`() {

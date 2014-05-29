@@ -12,7 +12,7 @@ object Request {
   def GET(url: Url) = Request(Method.GET, url)
 }
 
-case class Request(method: Method, url: Url, headers: Headers = List(), entity: Option[Entity] = None) {
+case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {
   def formParameters(parameters: FormParameter*): Request = {
     val existingFormParameters = entity.fold(List[FormParameter]())(fromEntity)
     copy(

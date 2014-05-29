@@ -1,25 +1,24 @@
 package io.shaka.http
 
 import unfiltered.filter.Planify
-import unfiltered.request.{Body, Seg, Path}
-import unfiltered.response.{ResponseHeader, Ok, NotFound, ResponseString}
+import unfiltered.request.{Seg, Path}
+import unfiltered.response.{Ok, ResponseFunction, NotFound}
 import unfiltered.jetty
+import unfiltered.response.ResponseHeader
+import unfiltered.response.ResponseString
 
 object TestHttpServer {
 
   type ServerAssert = (RequestAssertions) => (Unit)
   var serverAsserts = List[ServerAssert]()
-  var responseHeaderToAdd: Option[ResponseHeader] = None
+  var responseHeadersToAdd: List[ResponseHeader] = Nil
 
   val getEcho = Planify {
     case req@unfiltered.request.GET(Path(Seg(p :: Nil))) =>
       req.headers("Content-Type").foreach(println)
       val request = RequestAssertions(req)
       serverAsserts.foreach(_(request))
-      val statusAndHeaders = responseHeaderToAdd match {
-        case Some(header) => Ok ~> header
-        case _ => Ok
-      }
+      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
       statusAndHeaders ~> ResponseString(if(p=="empty") "" else p)
   }
 
@@ -28,10 +27,7 @@ object TestHttpServer {
       req.headers("Content-Type").foreach(println)
       val request = RequestAssertions(req)
       serverAsserts.foreach(_(request))
-      val statusAndHeaders = responseHeaderToAdd match {
-        case Some(header) => Ok ~> header
-        case _ => Ok
-      }
+      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
       statusAndHeaders ~> ResponseString(request.body)
 
   }
@@ -53,7 +49,7 @@ object TestHttpServer {
 
   def reset() {
     serverAsserts = List()
-    responseHeaderToAdd = None
+    responseHeadersToAdd = List()
   }
 
   def addAssert(assert: ServerAssert) {
@@ -61,7 +57,7 @@ object TestHttpServer {
   }
 
   def addResponseHeader(header: HttpHeader, value: String) {
-    responseHeaderToAdd = Some(ResponseHeader(header.name, List(value)))
+    responseHeadersToAdd = ResponseHeader(header.name, List(value)) :: responseHeadersToAdd
   }
 
   def url = server.url

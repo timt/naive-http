@@ -30,7 +30,7 @@ class ClientHttpHandler extends HttpHandler {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
     val is = if(s.code >=400) connection.getErrorStream else connection.getInputStream
     val entity = Entity(Source.fromInputStream(is).map(_.toByte).toArray)
-    val headers = connection.getHeaderFields.toList.flatMap(pair => pair._2.map((httpHeader(pair._1), _)))
+    val headers: Headers = Headers(connection.getHeaderFields.toList.flatMap(pair => pair._2.map((httpHeader(pair._1), _))))
 
     Response(
       status = s,
@@ -48,5 +48,4 @@ class ClientHttpHandler extends HttpHandler {
     connection.setInstanceFollowRedirects(false)
     connection
   }
-
 }

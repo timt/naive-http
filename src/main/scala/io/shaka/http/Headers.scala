@@ -10,6 +10,12 @@ case class Headers(headers: List[Header]) {
   def foreach[A](f: Header => A): Unit = headers.foreach(f)
 
   def ::(header: Header): Headers = Headers(headers.::(header))
+
+  def map[A](f: Header => A) = headers.map(f)
+
+  def find(p: Header => Boolean): Option[Header] = headers.find(p)
+
+  def filter(p: Header => Boolean): List[Header] = headers.filter(p)
 }
 
 object Headers {

@@ -1,4 +1,4 @@
-naive-http  [![Build Status](https://travis-ci.org/timt/naive-http.png?branch=master)](https://travis-ci.org/timt/naive-http)
+naive-http  [![Build Status](https://travis-ci.org/timt/naive-http.png?branch=master)](https://travis-ci.org/timt/naive-http) [ ![Download](https://api.bintray.com/packages/timt/repo/naive-http/images/download.png) ](https://bintray.com/timt/repo/naive-http/_latestVersion)
 ==========
 A really simple http client library implemented in scala with no dependencies
 
@@ -38,8 +38,6 @@ Add the following lines to your build.sbt
     TrustAllSslCertificates
 
 For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
-
-See [timt/repo](http://dl.bintray.com/timt/repo/io/shaka/naive-html_2.10) for latest released version number
 
 
 Code license

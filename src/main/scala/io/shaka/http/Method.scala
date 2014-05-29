@@ -10,6 +10,19 @@ object Method {
   case object TRACE extends Method {val name = "TRACE"}
   case object CONNECT extends Method {val name = "CONNECT"}
   case class unknownMethod(name: String) extends Method
+
+  val values = List(
+    OPTIONS,
+    GET,
+    HEAD,
+    POST,
+    PUT,
+    DELETE,
+    TRACE,
+    CONNECT
+  )
+
+  def method(name: String) = values.find(h => h.name == name).getOrElse(unknownMethod(name))
 }
 
 sealed trait Method {def name: String}

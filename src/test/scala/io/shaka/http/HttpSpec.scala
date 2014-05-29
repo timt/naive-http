@@ -49,6 +49,10 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     assert(response.entity.get.toString === "name1=some+value&name2")
   }
 
+  def `empty response entity represented as None`() {
+    assert(http(GET(TestHttpServer.url + "empty")).entity === None)
+  }
+
   override protected def beforeAll(): Unit = TestHttpServer.start()
 
   override protected def afterAll(): Unit = TestHttpServer.stop()

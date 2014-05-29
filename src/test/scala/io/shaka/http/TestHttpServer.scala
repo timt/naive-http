@@ -20,7 +20,7 @@ object TestHttpServer {
         case Some(header) => Ok ~> header
         case _ => Ok
       }
-      statusAndHeaders ~> ResponseString(p)
+      statusAndHeaders ~> ResponseString(if(p=="empty") "" else p)
   }
 
   val postEcho = Planify {

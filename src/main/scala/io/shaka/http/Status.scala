@@ -3,7 +3,7 @@ package io.shaka.http
 object Status {
 
   //INFORMATIONAL = set(100, 199}
-  case object CONTINUE                         extends Status {val code = 100; val description = "Continue"}
+  case object CONTINUE            extends Status {val code = 100; val description = "Continue"}
   case object SWITCHING_PROTOCOLS extends Status {val code = 101; val description = "Switching Protocols"}
 
   //SUCCESSFUL = set(200, 299}

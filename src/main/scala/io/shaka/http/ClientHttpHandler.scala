@@ -35,7 +35,7 @@ class ClientHttpHandler extends HttpHandler {
     Response(
       status = s,
       headers = headers,
-      entity = Some(entity)
+      entity = if(entity.content.isEmpty) None else Some(entity)
     )
   }
 

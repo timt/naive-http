@@ -5,9 +5,7 @@ import java.net.{HttpURLConnection, URL}
 import io.shaka.http.Status._
 import scala.Some
 import scala.io.Source
-import HttpHeader.httpHeader
-import scala.collection.JavaConversions.mapAsScalaMap
-import scala.collection.JavaConversions.collectionAsScalaIterable
+import Headers.toHeaders
 
 class ClientHttpHandler extends HttpHandler {
 
@@ -30,7 +28,7 @@ class ClientHttpHandler extends HttpHandler {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
     val is = if(s.code >=400) connection.getErrorStream else connection.getInputStream
     val entity = Entity(Source.fromInputStream(is).map(_.toByte).toArray)
-    val headers: Headers = Headers(connection.getHeaderFields.toList.flatMap(pair => pair._2.map((httpHeader(pair._1), _))))
+    val headers: Headers = toHeaders(connection.getHeaderFields)
 
     Response(
       status = s,

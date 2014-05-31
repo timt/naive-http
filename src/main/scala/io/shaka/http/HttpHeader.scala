@@ -34,6 +34,7 @@ object HttpHeader {
   case object X_CORRELATION_ID extends HttpHeader {val name = "X-CorrelationID"}
   case object TRANSFER_ENCODING extends HttpHeader {val name = "Transfer-Encoding"}
   case object ACCESS_CONTROL_ALLOW_ORIGIN extends HttpHeader {val name = "Access-Control-Allow-Origin"}
+  case object SERVER extends HttpHeader {val name = "Server"}
 
   case class unknownHeader(name: String) extends HttpHeader
 
@@ -69,9 +70,10 @@ object HttpHeader {
     X_FORWARDED_PROTO,
     X_CORRELATION_ID,
     TRANSFER_ENCODING,
-    ACCESS_CONTROL_ALLOW_ORIGIN
+    ACCESS_CONTROL_ALLOW_ORIGIN,
+    SERVER
   )
 
-  def httpHeader(name: String) = values.find(h => h.name == name).getOrElse(unknownHeader(name))
+  def httpHeader(name: String) = values.find(h => h.name equalsIgnoreCase name).getOrElse(unknownHeader(name))
 
 }

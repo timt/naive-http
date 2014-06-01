@@ -37,7 +37,7 @@ Add the following lines to your build.sbt
     import io.shaka.http.TrustAllSslCertificates
     TrustAllSslCertificates
 
-For more examples see [HttpSpec.scala](https://github.com/timt/http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
+For more examples see [HttpSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 
 
 Code license

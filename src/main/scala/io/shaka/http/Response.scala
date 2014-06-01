@@ -3,6 +3,10 @@ package io.shaka.http
 import io.shaka.http.Status.OK
 import io.shaka.http.HttpHeader.CONTENT_TYPE
 
+object Response {
+  def respond(content: String): Response = Response().entity(content)
+}
+
 case class Response(status: Status = OK, headers: Headers = Headers.Empty, entity: Option[Entity] = None){
 
   def entity(content: String) = copy(entity = Some(Entity(content)))

@@ -10,6 +10,8 @@ object Request {
   def POST(url: Url) = Request(Method.POST, url)
 
   def GET(url: Url) = Request(Method.GET, url)
+
+  def HEAD(url: Url) = Request(Method.HEAD, url)
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

@@ -6,12 +6,26 @@ import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 import io.shaka.http.FormParameters.{fromEntity, toEntity}
 import scala.Some
 
+
 object Request {
-  def POST(url: Url) = Request(Method.POST, url)
 
-  def GET(url: Url) = Request(Method.GET, url)
+  object GET {
+    def apply(url: Url) = Request(Method.GET, url)
 
-  def HEAD(url: Url) = Request(Method.HEAD, url)
+    def unapply(req: Request): Option[String] = if (req.method == Method.GET) Some(req.url) else None
+  }
+
+  object POST {
+    def apply(url: Url) = Request(Method.POST, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.POST) Some(req.url) else None
+  }
+
+  object HEAD {
+    def apply(url: Url) = Request(Method.HEAD, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.HEAD) Some(req.url) else None
+  }
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

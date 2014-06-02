@@ -17,6 +17,8 @@ Add the following lines to your build.sbt
 
     libraryDependencies += "io.shaka" %% "naive-http" % "21"
 
+Start hacking
+
     import io.shaka.http.Http.http
     import io.shaka.http.Request.{GET, POST}
     ...

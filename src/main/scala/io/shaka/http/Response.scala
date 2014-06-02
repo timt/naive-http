@@ -9,7 +9,9 @@ object Response {
 
 case class Response(status: Status = OK, headers: Headers = Headers.Empty, entity: Option[Entity] = None){
 
-  def entity(content: String) = copy(entity = Some(Entity(content)))
+  def status(newStatus: Status) = copy(status = newStatus)
+
+  def entity(content: String): Response = copy(entity = Some(Entity(content)))
 
   def header(header: HttpHeader, value: String) = copy(headers = (header, value) :: headers)
 

@@ -1,12 +1,13 @@
 package io.shaka.http
 
-import org.scalatest.{BeforeAndAfterEach, BeforeAndAfterAll, Spec}
+import org.scalatest.{Matchers, BeforeAndAfterEach, BeforeAndAfterAll, Spec}
 import io.shaka.http.Http.http
 import io.shaka.http.Status.OK
 import io.shaka.http.Request.{GET, POST}
 import io.shaka.http.HttpHeader.{ETAG, CONTENT_TYPE, USER_AGENT}
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
 import io.shaka.http.FormParameters.FormParameters
+import Matchers._
 
 class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
 
@@ -54,6 +55,12 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
       .formParameters(formParameters:_*))
     assert(response.status === OK)
     assert(response.entity.get.toString === "name1=some+value&name2")
+  }
+
+  def `can get pdf`(){
+    val response = http(GET(TestHttpServer.url + "somepdf"))
+    assert(response.status === OK)
+    response.entity should not be empty
   }
 
   def `empty response entity represented as None`() {

@@ -2,10 +2,13 @@ package io.shaka.http
 
 import unfiltered.filter.Planify
 import unfiltered.request.{Seg, Path}
-import unfiltered.response.{Ok, ResponseFunction, NotFound}
+import unfiltered.response._
 import unfiltered.jetty
+import io.shaka.http.RequestAssertions
 import unfiltered.response.ResponseHeader
 import unfiltered.response.ResponseString
+import scala.collection.mutable.ListBuffer
+import java.io.{FileInputStream, InputStream}
 
 object TestHttpServer {
 
@@ -32,9 +35,19 @@ object TestHttpServer {
 
   }
 
+  val somePdfFile = "./src/test/scala/io/shaka/http/pdf-sample.pdf"
+  val getPdf = Planify {
+    case req@unfiltered.request.GET(Path(Seg("somepdf" :: Nil))) =>
+      val is = new FileInputStream(somePdfFile)
+      val bytes = inputStreamToByteArray(is)
+      is.close()
+      Ok ~> ResponseBytes(bytes)
+  }
+
   val notFound = Planify {case _ => NotFound ~> ResponseString("You're having a laugh")}
 
   val server: jetty.Http = unfiltered.jetty.Http.anylocal
+    .filter(getPdf)
     .filter(getEcho)
     .filter(postEcho)
     .filter(notFound)
@@ -61,5 +74,15 @@ object TestHttpServer {
   }
 
   def url = server.url
+
+  def inputStreamToByteArray(is: InputStream): Array[Byte] = {
+    val buf = ListBuffer[Byte]()
+    var b = is.read()
+    while (b != -1) {
+      buf.append(b.byteValue)
+      b = is.read()
+    }
+    buf.toArray
+  }
 
 }

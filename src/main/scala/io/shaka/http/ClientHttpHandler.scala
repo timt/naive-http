@@ -6,6 +6,8 @@ import io.shaka.http.Status._
 import scala.Some
 import scala.io.Source
 import Headers.toHeaders
+import java.io.InputStream
+import scala.collection.mutable.ListBuffer
 
 class ClientHttpHandler extends HttpHandler {
 
@@ -27,7 +29,7 @@ class ClientHttpHandler extends HttpHandler {
   def buildResponse(connection: HttpURLConnection) = {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
     val is = if(s.code >=400) connection.getErrorStream else connection.getInputStream
-    val entity = Entity(Source.fromInputStream(is).map(_.toByte).toArray)
+    val entity = Entity(inputStreamToByteArray(is))
     val headers: Headers = toHeaders(connection.getHeaderFields)
 
     Response(
@@ -46,4 +48,15 @@ class ClientHttpHandler extends HttpHandler {
     connection.setInstanceFollowRedirects(false)
     connection
   }
+
+  def inputStreamToByteArray(is: InputStream): Array[Byte] = {
+    val buf = ListBuffer[Byte]()
+    var b = is.read()
+    while (b != -1) {
+      buf.append(b.byteValue)
+      b = is.read()
+    }
+    buf.toArray
+  }
+
 }

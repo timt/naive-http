@@ -6,13 +6,13 @@ import io.shaka.http.HttpHeader._
 case class Headers(headers: List[Header]) {
   def contains(header: HttpHeader): Boolean = headers.exists(_._1 == header)
 
-  def contains(header: Header): Boolean = contains(header._1) && this(header._1).contains(header._2)
+  def contains(header: Header): Boolean = headers.contains(header)
 
-  def apply(header: HttpHeader): List[String] = headers.filter(_._1 == header).map(_._2)
+  def apply(header: HttpHeader): List[String] = filter(_._1 == header).map(_._2)
 
   def foreach[A](f: Header => A): Unit = headers.foreach(f)
 
-  def ::(header: Header): Headers = Headers(headers.::(header))
+  def ::(header: Header): Headers = Headers(header :: headers)
 
   def map[A](f: Header => A) = headers.map(f)
 

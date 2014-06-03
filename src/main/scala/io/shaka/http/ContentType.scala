@@ -1,5 +1,7 @@
 package io.shaka.http
 
+import io.shaka.http.HttpHeader.CONTENT_TYPE
+
 object ContentType {
   case object WILDCARD extends ContentType {val value = "*/*"}
   case object APPLICATION_XML extends ContentType {val value = "application/xml"}
@@ -25,5 +27,40 @@ object ContentType {
   case object IMAGE_X_ICON extends ContentType {val value = "image/x-icon"}
   case object IMAGE_JPEG extends ContentType {val value = "image/jpeg"}
   case object IMAGE_SVG extends ContentType {val value = "image/svg+xml"}
+
+  case class unknownContentType(value: String) extends ContentType
+
+  val values = List(
+
+    WILDCARD,
+    APPLICATION_XML,
+    APPLICATION_ATOM_XML,
+    APPLICATION_XHTML_XML,
+    APPLICATION_SVG_XML,
+    APPLICATION_JAVASCRIPT,
+    APPLICATION_JSON,
+    APPLICATION_PDF,
+    APPLICATION_FORM_URLENCODED,
+    APPLICATION_OCTET_STREAM,
+    APPLICATION_MS_EXCEL,
+    MULTIPART_FORM_DATA,
+    TEXT_PLAIN,
+    TEXT_CSV,
+    TEXT_XML,
+    TEXT_HTML,
+    TEXT_CSS,
+    TEXT_JAVASCRIPT,
+    TEXT_CACHE_MANIFEST,
+    IMAGE_PNG,
+    IMAGE_GIF,
+    IMAGE_X_ICON,
+    IMAGE_JPEG,
+    IMAGE_SVG
+  )
+
+  def contentType(value: String) = values.find(h => h.value equalsIgnoreCase value).getOrElse(unknownContentType(value))
+
+  def unapply(request: Request) = if (request.headers.contains(CONTENT_TYPE)) request.headers(CONTENT_TYPE).headOption.map(contentType) else None
+
 }
 trait ContentType {def value: String}

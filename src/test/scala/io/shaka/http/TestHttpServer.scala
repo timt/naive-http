@@ -4,11 +4,10 @@ import unfiltered.filter.Planify
 import unfiltered.request.{Seg, Path}
 import unfiltered.response._
 import unfiltered.jetty
-import io.shaka.http.RequestAssertions
 import unfiltered.response.ResponseHeader
 import unfiltered.response.ResponseString
-import scala.collection.mutable.ListBuffer
-import java.io.{FileInputStream, InputStream}
+import java.io.FileInputStream
+import IO.inputStreamToByteArray
 
 object TestHttpServer {
 
@@ -75,14 +74,5 @@ object TestHttpServer {
 
   def url = server.url
 
-  def inputStreamToByteArray(is: InputStream): Array[Byte] = {
-    val buf = ListBuffer[Byte]()
-    var b = is.read()
-    while (b != -1) {
-      buf.append(b.byteValue)
-      b = is.read()
-    }
-    buf.toArray
-  }
 
 }

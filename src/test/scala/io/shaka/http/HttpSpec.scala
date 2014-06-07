@@ -2,7 +2,7 @@ package io.shaka.http
 
 import org.scalatest.{Matchers, BeforeAndAfterEach, BeforeAndAfterAll, Spec}
 import io.shaka.http.Http.http
-import io.shaka.http.Status.OK
+import io.shaka.http.Status.{FORBIDDEN, OK}
 import io.shaka.http.Request.{GET, POST}
 import io.shaka.http.HttpHeader.{ETAG, CONTENT_TYPE, USER_AGENT}
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
@@ -61,6 +61,12 @@ class HttpSpec extends Spec with BeforeAndAfterAll with BeforeAndAfterEach {
     val response = http(GET(TestHttpServer.url + "somepdf"))
     assert(response.status === OK)
     response.entity should not be empty
+  }
+
+  def `can handle Forbidden (connection input stream is null)`(){
+    val response = http(GET(TestHttpServer.url + "forbidden"))
+    assert(response.status === FORBIDDEN)
+    response.entity shouldBe empty
   }
 
   def `empty response entity represented as None`() {

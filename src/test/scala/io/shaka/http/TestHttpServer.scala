@@ -43,9 +43,15 @@ object TestHttpServer {
       Ok ~> ResponseBytes(bytes)
   }
 
+  val forbidden = Planify {
+    case req@unfiltered.request.GET(Path(Seg("forbidden" :: Nil)))=>
+      Forbidden
+  }
+
   val notFound = Planify {case _ => NotFound ~> ResponseString("You're having a laugh")}
 
   val server: jetty.Http = unfiltered.jetty.Http.anylocal
+    .filter(forbidden)
     .filter(getPdf)
     .filter(getEcho)
     .filter(postEcho)

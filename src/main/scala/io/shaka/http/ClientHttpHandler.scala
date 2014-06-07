@@ -26,8 +26,8 @@ class ClientHttpHandler extends HttpHandler {
 
   def buildResponse(connection: HttpURLConnection) = {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
-    val is = if(s.code >=400) connection.getErrorStream else connection.getInputStream
-    val entity = Entity(inputStreamToByteArray(is))
+    val is = Option(if(s.code >=400) connection.getErrorStream else connection.getInputStream)
+    val entity = Entity(is.fold("".getBytes)(inputStreamToByteArray))
     val headers: Headers = toHeaders(connection.getHeaderFields)
 
     Response(

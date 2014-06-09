@@ -29,8 +29,8 @@ class ClientHttpHandler extends HttpHandler {
     val headers: Headers = toHeaders(connection.getHeaderFields)
     val entity: Option[Entity] = for {
       is <- Option(if(s.code >=400) connection.getErrorStream else connection.getInputStream)
-      value <- Zero.toOption(inputStreamToByteArray(is))
-      entity <- Some(Entity(value))
+      content <- Zero.toOption(inputStreamToByteArray(is))
+      entity <- Some(Entity(content))
     } yield entity
 
     Response(

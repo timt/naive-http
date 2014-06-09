@@ -26,14 +26,17 @@ class ClientHttpHandler extends HttpHandler {
 
   def buildResponse(connection: HttpURLConnection) = {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
-    val is = Option(if(s.code >=400) connection.getErrorStream else connection.getInputStream)
-    val entity = Entity(is.fold(Array[Byte]())(inputStreamToByteArray))
     val headers: Headers = toHeaders(connection.getHeaderFields)
+    val entity: Option[Entity] = for {
+      is <- Option(if(s.code >=400) connection.getErrorStream else connection.getInputStream)
+      value <- Zero.toOption(inputStreamToByteArray(is))
+      entity <- Some(Entity(value))
+    } yield entity
 
     Response(
       status = s,
       headers = headers,
-      entity = if(entity.content.isEmpty) None else Some(entity)
+      entity = entity
     )
   }
 

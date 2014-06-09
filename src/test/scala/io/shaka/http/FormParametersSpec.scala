@@ -1,17 +1,16 @@
 package io.shaka.http
 
-import org.scalatest.Spec
+import org.scalatest.FunSuite
 import FormParameters.{fromEntity, toEntity}
 
-class FormParametersSpec extends Spec {
+class FormParametersSpec extends FunSuite {
 
-  def `can create FormParameters from Entity`(){
+  test("can create FormParameters from Entity") {
     assert(fromEntity(Entity("name1=value1&name2=value2")) === List(FormParameter("name1", "value1"), FormParameter("name2", "value2")))
   }
 
-  def `can create Entity from FormParameters`(){
+  test("can create Entity from FormParameters") {
     assert(toEntity(List(FormParameter("name1", "value1"), FormParameter("name2", "value2"))).toString === Entity("name1=value1&name2=value2").toString)
   }
-
 
 }

@@ -6,4 +6,5 @@ object Http {
   type Header = (HttpHeader, String)
 
   def http: HttpHandler = new ClientHttpHandler
+  def http(proxy: Proxy): HttpHandler = new ClientHttpHandler(Some(proxy))
 }

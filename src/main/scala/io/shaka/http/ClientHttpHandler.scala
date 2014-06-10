@@ -1,16 +1,20 @@
 package io.shaka.http
 
 import io.shaka.http.Http._
-import java.net.{HttpURLConnection, URL}
+import java.net.{InetSocketAddress, HttpURLConnection, URL}
 import io.shaka.http.Status._
 import scala.Some
 import Headers.toHeaders
 import IO.inputStreamToByteArray
+import java.net.{Proxy => JavaProxy}
+import JavaProxy.Type.HTTP
 
-class ClientHttpHandler extends HttpHandler {
+case class Proxy(host: String, port: Int)
+
+class ClientHttpHandler(proxy: Option[Proxy] = None) extends HttpHandler {
 
   override def apply(request: Request): Response = {
-    val connection = createConnection(request.url)
+    val connection = createConnection(request.url, proxy)
     connection.setRequestMethod(request.method.name)
     request.headers.foreach {
       header =>
@@ -40,8 +44,11 @@ class ClientHttpHandler extends HttpHandler {
     )
   }
 
-  def createConnection(url: Url) = {
-    val connection = new URL(url).openConnection().asInstanceOf[HttpURLConnection]
+  private def createConnection(url: Url, proxy: Option[Proxy]) = {
+    val theUrl = new URL(url)
+    val connection = proxy
+      .map(p => new JavaProxy(HTTP, new InetSocketAddress(p.host,p.port)))
+      .fold(theUrl.openConnection())(theUrl.openConnection).asInstanceOf[HttpURLConnection]
     val timeoutInMillis = 0
     connection.setUseCaches(false)
     connection.setConnectTimeout(timeoutInMillis)

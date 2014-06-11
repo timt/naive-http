@@ -15,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "41"
+    libraryDependencies += "io.shaka" %% "naive-http" % "42"
 
 Start hacking
 
@@ -36,7 +36,9 @@ Start hacking
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
     ...
     Specify a proxy
+    import Proxy.proxy
     val response = http(proxy("my.proxy.server", 8080))(GET("http://www.google.com"))
+    val response = http(proxy("my.proxy.server", 8080, "proxyUser", "proxyPassword"))(GET("http://www.google.com"))
     ...
     //Trust all SSL certificates
     import io.shaka.http.TrustAllSslCertificates

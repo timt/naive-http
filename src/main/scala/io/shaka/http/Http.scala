@@ -1,6 +1,6 @@
 package io.shaka.http
 
-import Proxy.Proxy
+import proxy.Proxy
 
 object Http {
   type HttpHandler = (Request) => (Response)

@@ -36,7 +36,7 @@ Start hacking
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
     ...
     Specify a proxy
-    import Proxy.proxy
+    import io.shaka.http.proxy
     val response = http(proxy("my.proxy.server", 8080))(GET("http://www.google.com"))
     val response = http(proxy("my.proxy.server", 8080, "proxyUser", "proxyPassword"))(GET("http://www.google.com"))
     ...

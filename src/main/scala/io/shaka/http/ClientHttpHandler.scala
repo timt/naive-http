@@ -6,7 +6,7 @@ import io.shaka.http.Status._
 import scala.Some
 import Headers.toHeaders
 import IO.inputStreamToByteArray
-import Proxy.{Proxy, noProxy}
+import proxy.{Proxy, noProxy}
 
 class ClientHttpHandler(proxy: Proxy = noProxy) extends HttpHandler {
 

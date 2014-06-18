@@ -21,10 +21,22 @@ object Request {
     def unapply(req: Request): Option[String] = if (req.method == Method.POST) Some(req.url) else None
   }
 
+  object PUT {
+    def apply(url: Url) = Request(Method.PUT, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.PUT) Some(req.url) else None
+  }
+
   object HEAD {
     def apply(url: Url) = Request(Method.HEAD, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.HEAD) Some(req.url) else None
+  }
+
+  object DELETE {
+    def apply(url: Url) = Request(Method.DELETE, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.DELETE) Some(req.url) else None
   }
 }
 

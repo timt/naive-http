@@ -15,7 +15,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
     val expected = "helloworld"
     val response = http(GET(TestHttpServer.url + expected))
     assert(response.status === OK)
-    assert(response.entity.get.toString === expected)
+    assert(response.entityAsString === expected)
   }
 
   test("request sends headers") {
@@ -43,7 +43,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
     val content = """{"foo":"bar"}"""
     val response = http(POST(TestHttpServer.url + "echoPost").entity(content))
     assert(response.status === OK)
-    assert(response.entity.get.toString === content)
+    assert(response.entityAsString === content)
   }
 
   test("can post form parameters") {
@@ -54,7 +54,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
     val response = http(POST(TestHttpServer.url + "echoPost")
       .formParameters(formParameters:_*))
     assert(response.status === OK)
-    assert(response.entity.get.toString === "name1=some+value&name2")
+    assert(response.entityAsString === "name1=some+value&name2")
   }
 
   test("can get pdf") {

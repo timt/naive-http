@@ -1,6 +1,7 @@
 package io.shaka.http
 
-import io.shaka.http.proxy._
+import proxy.{Proxy, noProxy}
+import java.io.FileInputStream
 
 object Http {
   type HttpHandler = (Request) => (Response)
@@ -8,4 +9,12 @@ object Http {
   type Header = (HttpHeader, String)
 
   def http(request: Request)(implicit proxy: Proxy = noProxy): Response = new ClientHttpHandler(proxy).apply(request)
+  
+  def https(keyStorePath: String, keyStorePassword: String): HttpHandler = {
+    val keyStoreInputStream = new FileInputStream(keyStorePath)
+
+    try {
+      new ClientHttpsHandler(keyStoreInputStream, keyStorePassword)
+    } finally keyStoreInputStream.close()
+  }
 }

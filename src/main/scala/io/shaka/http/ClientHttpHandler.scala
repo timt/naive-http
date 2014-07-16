@@ -43,7 +43,7 @@ class ClientHttpHandler(proxy: Proxy = noProxy) extends HttpHandler {
     )
   }
 
-  private def createConnection(url: Url, proxy: Proxy) = {
+  protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
     val timeoutInMillis = 0
     connection.setUseCaches(false)
@@ -52,7 +52,4 @@ class ClientHttpHandler(proxy: Proxy = noProxy) extends HttpHandler {
     connection.setInstanceFollowRedirects(false)
     connection
   }
-
-
 }
-

@@ -3,13 +3,13 @@ package io.shaka.http
 import unfiltered.filter.Planify
 import unfiltered.request.{Seg, Path}
 import unfiltered.response._
-import unfiltered.jetty
 import unfiltered.response.ResponseHeader
 import unfiltered.response.ResponseString
 import java.io.FileInputStream
 import IO.inputStreamToByteArray
+import unfiltered.jetty.Https
 
-object TestHttpServer {
+class TestHttpServer(unfilteredServer: =>unfiltered.jetty.Server) {
 
   type ServerAssert = (RequestAssertions) => (Unit)
   var serverAsserts = List[ServerAssert]()
@@ -50,7 +50,7 @@ object TestHttpServer {
 
   val notFound = Planify {case _ => NotFound ~> ResponseString("You're having a laugh")}
 
-  val server: jetty.Http = unfiltered.jetty.Http.anylocal
+  val server: unfiltered.jetty.Server = unfilteredServer
     .filter(forbidden)
     .filter(getPdf)
     .filter(getEcho)
@@ -79,6 +79,21 @@ object TestHttpServer {
   }
 
   def url = server.url
+}
 
+object TestHttpServer {
+  def startHttp() = {
+    val server = new TestHttpServer(unfiltered.jetty.Http.anylocal)
+    server.start()
+    server
+  }
 
+  def startHttps(ks: String, ksp: String) = {
+    val server = new TestHttpServer(new Https(unfiltered.util.Port.any, "127.0.0.1") {
+      override lazy val keyStore: String = ks
+      override lazy val keyStorePassword: String = ksp
+    })
+    server.start()
+    server
+  }
 }

@@ -1,13 +1,13 @@
 package io.shaka.http
 
-import org.scalatest._
-import io.shaka.http.Http.http
-import io.shaka.http.Status.{FORBIDDEN, OK}
-import io.shaka.http.Request.{GET, POST}
-import io.shaka.http.HttpHeader.{ETAG, CONTENT_TYPE, USER_AGENT}
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
 import io.shaka.http.FormParameters.FormParameters
-import Matchers._
+import io.shaka.http.Http.http
+import io.shaka.http.HttpHeader.{CONTENT_TYPE, ETAG, USER_AGENT}
+import io.shaka.http.Request.{GET, POST}
+import io.shaka.http.Status.{FORBIDDEN, OK}
+import org.scalatest.Matchers._
+import org.scalatest._
 
 class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 

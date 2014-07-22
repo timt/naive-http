@@ -1,12 +1,11 @@
 package io.shaka.http
 
-import proxy.Proxy
+import io.shaka.http.proxy._
 
 object Http {
   type HttpHandler = (Request) => (Response)
   type Url = String
   type Header = (HttpHeader, String)
 
-  def http: HttpHandler = new ClientHttpHandler
-  def http(proxy: Proxy): HttpHandler = new ClientHttpHandler(proxy)
+  def http(request: Request)(implicit proxy: Proxy = noProxy): Response = new ClientHttpHandler(proxy).apply(request)
 }

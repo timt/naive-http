@@ -1,7 +1,7 @@
 package io.shaka.http
 
 import io.shaka.http.Http._
-import io.shaka.http.HttpHeader.CONTENT_TYPE
+import io.shaka.http.HttpHeader.{ACCEPT, CONTENT_TYPE}
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 import io.shaka.http.FormParameters.{fromEntity, toEntity}
 import scala.Some
@@ -55,6 +55,8 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
   def contentType(value: String) = header(CONTENT_TYPE, value)
 
   def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
+
+  def accept(value: ContentType) = header(ACCEPT, value.value)
 
   def entity(content: String) = copy(entity = Some(Entity(content)))
 }

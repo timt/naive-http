@@ -13,9 +13,13 @@ case class Response(status: Status = OK, headers: Headers = Headers.Empty, entit
 
   def header(header: HttpHeader, value: String) = copy(headers = (header, value) :: headers)
 
+  def header(header: HttpHeader) = headers.find(_ == header)
+
   def contentType(value: String) = header(CONTENT_TYPE, value)
 
   def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
+
+  def contentType = header(CONTENT_TYPE)
 
   def entity(content: String): Response = copy(entity = Some(Entity(content)))
 

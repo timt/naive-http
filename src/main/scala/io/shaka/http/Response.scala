@@ -13,7 +13,7 @@ case class Response(status: Status = OK, headers: Headers = Headers.Empty, entit
 
   def header(header: HttpHeader, value: String) = copy(headers = (header, value) :: headers)
 
-  def header(header: HttpHeader) = headers.find(_ == header)
+  def header(header: HttpHeader) = headers.find(_._1 == header).map(_._2)
 
   def contentType(value: String) = header(CONTENT_TYPE, value)
 

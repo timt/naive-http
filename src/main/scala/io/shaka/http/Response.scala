@@ -19,7 +19,7 @@ case class Response(status: Status = OK, headers: Headers = Headers.Empty, entit
 
   def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
 
-  def contentType = header(CONTENT_TYPE)
+  def contentType = header(CONTENT_TYPE).map(ContentType.contentType)
 
   def entity(content: String): Response = copy(entity = Some(Entity(content)))
 

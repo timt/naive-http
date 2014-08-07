@@ -22,7 +22,9 @@ class ClientHttpHandler(proxy: Proxy = noProxy) extends HttpHandler {
         connection.setDoOutput(true)
         connection.getOutputStream.write(entity.content)
     }
-    buildResponse(connection)
+    val response = buildResponse(connection)
+    connection.disconnect()
+    response
   }
 
   def buildResponse(connection: HttpURLConnection) = {

@@ -3,16 +3,17 @@ package io.shaka.http
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
 import io.shaka.http.Request.GET
 import io.shaka.http.Status.OK
+import io.shaka.http.Http.http
 
 
 class HttpsSpec extends FunSuite with BeforeAndAfterEach {
   var server: TestHttpServer = _
 
   test("does HTTPS"){
-    val https = io.shaka.http.Http.https("src/test/certs/keystore-testing.jks", "password")
+    implicit val https = Some(HttpsKeyStore("src/test/certs/keystore-testing.jks", "password"))
 
     val expected = "helloworld"
-    val response = https(GET(server.url + expected))
+    val response = http(GET(server.url + expected))
     assert(response.status === OK)
     assert(response.entityAsString === expected)
   }

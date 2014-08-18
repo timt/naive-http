@@ -3,12 +3,11 @@ package io.shaka.http
 import io.shaka.http.Http._
 import java.net.{HttpURLConnection, URL}
 import io.shaka.http.Status._
-import scala.Some
 import Headers.toHeaders
 import IO.inputStreamToByteArray
-import proxy.{Proxy, noProxy}
+import io.shaka.http.proxy.Proxy
 
-class ClientHttpHandler(proxy: Proxy = noProxy) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)

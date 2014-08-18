@@ -4,10 +4,22 @@ import io.shaka.http.Http.Url
 import io.shaka.http.proxy.Proxy
 import java.security.KeyStore
 import javax.net.ssl.{SSLSocketFactory, HttpsURLConnection, SSLContext, TrustManagerFactory}
-import java.io.InputStream
+import java.io.{FileInputStream, InputStream}
 
+case class HttpsKeyStore(path: String, password: String)
 
-class ClientHttpsHandler(keyStoreInputStream: InputStream, keyStorePassword: String) extends ClientHttpHandler {
+object ClientHttpsHandler {
+  def apply(proxy: Proxy, httpsKeyStore: HttpsKeyStore): ClientHttpsHandler = {
+
+    val keyStoreInputStream = new FileInputStream(httpsKeyStore.path)
+
+    try {
+      new ClientHttpsHandler(proxy, keyStoreInputStream, httpsKeyStore.password)
+    } finally keyStoreInputStream.close()
+  }
+}
+
+class ClientHttpsHandler(val proxy: Proxy, val keyStoreInputStream: InputStream, val keyStorePassword: String) extends ClientHttpHandler(proxy) {
   val sslFactory: SSLSocketFactory = {
     val keyStore: KeyStore = KeyStore.getInstance(KeyStore.getDefaultType)
 

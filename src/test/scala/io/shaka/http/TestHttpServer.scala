@@ -1,7 +1,9 @@
 package io.shaka.http
 
+import javax.servlet.http.HttpServletRequest
+
 import unfiltered.filter.Planify
-import unfiltered.request.{Seg, Path}
+import unfiltered.request.{HttpRequest, Seg, Path}
 import unfiltered.response._
 import unfiltered.jetty
 import unfiltered.response.ResponseHeader
@@ -9,66 +11,33 @@ import unfiltered.response.ResponseString
 import java.io.FileInputStream
 import IO.inputStreamToByteArray
 
-object TestHttpServer {
 
-  type ServerAssert = (RequestAssertions) => (Unit)
-  var serverAsserts = List[ServerAssert]()
-  var responseHeadersToAdd: List[ResponseHeader] = Nil
-
-  val getEcho = Planify {
-    case req@unfiltered.request.GET(Path(Seg(p :: Nil))) =>
-      req.headers("Content-Type").foreach(println)
-      val request = RequestAssertions(req)
-      serverAsserts.foreach(_(request))
-      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
-      statusAndHeaders ~> ResponseString(if(p=="empty") "" else p)
-  }
-
-  val postEcho = Planify {
-    case req@unfiltered.request.POST(Path(Seg("echoPost" :: Nil))) =>
-      req.headers("Content-Type").foreach(println)
-      val request = RequestAssertions(req)
-      serverAsserts.foreach(_(request))
-      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
-      statusAndHeaders ~> ResponseString(request.body)
-
-  }
-
-  val somePdfFile = "./src/test/scala/io/shaka/http/pdf-sample.pdf"
-  val getPdf = Planify {
-    case req@unfiltered.request.GET(Path(Seg("somepdf" :: Nil))) =>
-      val is = new FileInputStream(somePdfFile)
-      val bytes = inputStreamToByteArray(is)
-      is.close()
-      Ok ~> ResponseBytes(bytes)
-  }
-
-  val forbidden = Planify {
-    case req@unfiltered.request.GET(Path(Seg("forbidden" :: Nil)))=>
-      Forbidden
-  }
-
-  val notFound = Planify {case _ => NotFound ~> ResponseString("You're having a laugh")}
-
-  val server: jetty.Http = unfiltered.jetty.Http.anylocal
-    .filter(forbidden)
-    .filter(getPdf)
-    .filter(getEcho)
-    .filter(postEcho)
-    .filter(notFound)
-
-  def start() {
-    server.start()
-  }
-
-  def stop() {
+object TestHttpServer{
+  def withServer(block: TestHttpServer => Unit) = {
+    val server = new TestHttpServer().start()
+    block(server)
     server.stop()
   }
+  def apply() = new TestHttpServer().start()
+}
 
-  def reset() {
-    serverAsserts = List()
-    responseHeadersToAdd = List()
+class TestHttpServer {
+  type ServerAssert = (RequestAssertions) => (Unit)
+  private var serverAsserts = List[ServerAssert]()
+  private var responseHeadersToAdd: List[ResponseHeader] = Nil
+
+  private var getResponse:(String) => ResponseFunction[Any] = (path) => {
+    val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
+    statusAndHeaders ~> ResponseString(path)
   }
+
+  def get(url: String) = new {
+    def responds(response: ResponseFunction[Any]) {
+      getResponse = (path) => if (path == url) response else NotFound ~> ResponseString("You're having a laugh")
+    }
+  }
+
+  def toUrl(path: String) = url + path
 
   def addAssert(assert: ServerAssert) {
     serverAsserts = assert :: serverAsserts
@@ -78,7 +47,38 @@ object TestHttpServer {
     responseHeadersToAdd = ResponseHeader(header.name, List(value)) :: responseHeadersToAdd
   }
 
-  def url = server.url
+  private val getAll = Planify{
+    case req@unfiltered.request.GET(Path(Seg(p :: Nil))) =>
+      serverAsserts.foreach(_(RequestAssertions(req)))
+      getResponse(p)
+  }
+
+  private val postEcho = Planify {
+    case req@unfiltered.request.POST(Path(Seg("echoPost" :: Nil))) =>
+      req.headers("Content-Type").foreach(println)
+      val request = RequestAssertions(req)
+      serverAsserts.foreach(_(request))
+      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}
+      statusAndHeaders ~> ResponseString(request.body)
+
+  }
+
+  val server: jetty.Http = unfiltered.jetty.Http.anylocal
+    .filter(getAll)
+    .filter(postEcho)
+
+  private def start() = {
+    server.start()
+    this
+  }
+
+  private def stop() {
+    server.stop()
+  }
+
+  private def url = server.url
+
+
 
 
 }

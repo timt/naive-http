@@ -55,7 +55,6 @@ class TestHttpServer {
 
   private val postEcho = Planify {
     case req@unfiltered.request.POST(Path(Seg("echoPost" :: Nil))) =>
-      req.headers("Content-Type").foreach(println)
       val request = RequestAssertions(req)
       serverAsserts.foreach(_(request))
       val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]){case (status, header) => status ~> header}

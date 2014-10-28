@@ -7,7 +7,7 @@ Requirements
 ------------
 
 * [scala](http://www.scala-lang.org) 2.10.4
-* [scala](http://www.scala-lang.org) 2.11.0
+* [scala](http://www.scala-lang.org) 2.11.2
 
 Usage
 -----
@@ -15,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "59"
+    libraryDependencies += "io.shaka" %% "naive-http" % "60"
 
 Start hacking
 

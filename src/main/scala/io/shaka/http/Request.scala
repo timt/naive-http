@@ -48,17 +48,15 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
       headers = (CONTENT_TYPE -> APPLICATION_FORM_URLENCODED.value) :: headers
     )
   }
-
-
   def header(header: HttpHeader, value: String): Request = copy(headers = (header, value) :: headers)
-
   def contentType(value: String) = header(CONTENT_TYPE, value)
-
   def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
-
   def accept(value: ContentType) = header(ACCEPT, value.value)
-
   def entity(content: String) = copy(entity = Some(Entity(content)))
+  def entityAsString: String = entity match {
+    case Some(value) => value.toString
+    case _ => throw new RuntimeException("There is no entity in this request! Consider using request.entity:Option[Entity] instead.")
+  }
 }
 
 

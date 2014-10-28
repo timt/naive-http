@@ -15,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "57"
+    libraryDependencies += "io.shaka" %% "naive-http" % "59"
 
 Start hacking
 
@@ -35,17 +35,27 @@ Start hacking
     //Post form parameters
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
     ...
-    Specify a proxy
+    //Specify a proxy
     implicit val proxy = io.shaka.http.proxy("my.proxy.server", 8080)
     val response = http(GET("http://www.google.com"))
     implicit val proxy = io.shaka.http.proxy("my.proxy.server", 8080, "proxyUser", "proxyPassword")
     val response = http(GET("http://www.google.com"))
     ...
     //Trust all SSL certificates
-    import io.shaka.http.TrustAllSslCertificates
+    import io.shaka.http.Https.TrustAllSslCertificates
     TrustAllSslCertificates
+    ...
+    //Use a key store
+    import io.shaka.http.Https.HttpsKeyStore
+    implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))
+    val response = http(GET("https://someurl"))
 
-For more examples see [HttpSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
+
+
+For more examples see 
+
+* [HttpSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
+* [HttpsSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpsSpec.scala)
 
 
 Code license

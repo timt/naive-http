@@ -1,8 +1,7 @@
 package io.shaka.http
 
-import java.net.{Proxy => JavaProxy, PasswordAuthentication, Authenticator, InetSocketAddress}
 import java.net.Proxy.Type._
-import sun.security.krb5.Credentials
+import java.net.{Authenticator, InetSocketAddress, PasswordAuthentication, Proxy => JavaProxy}
 
 object proxy {
   type Proxy = () => JavaProxy

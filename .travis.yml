@@ -1,13 +1,16 @@
- language: scala
- scala:
-   - "2.10.4"
- jdk:
-   - oraclejdk7
- env:
-   global:
-     - LIB_VERSION=$TRAVIS_BUILD_NUMBER
-     - secure: O3BiQeEXVXrk+1WJJOdCum/S1AxXy2G+MEadfyoxdn6zBQ0X5bGggp2pnTBbDRPWKkACaGRQH3HJUlldDLk3TTMPDXLlcoBdRK2t5u4K2GTwO+J1RE+wuMyScSX/4AvG6RAFoR7Hl+bUIesYuhotBs7QCg0lgTd7s7c9jTUuBW8=
-     - secure: RDgI7fqZc6HckQzDQwtB9PxVXQEch4jbyCd5YT6DvQi/EEJI01rXk9GI69seF2NCvTDYBpKmx77AwxbXy5xAg0lsfeSQjmwu/d5u+ytyXyz+Z1NIABDP7qBzVMuVzRofwz02b2hnNuj9JDaZD8Hzr53/TX7Wy5KUbEugT4GDFeo=
-     - secure: PFZhwmKsizYud58iM3pJo5Ae3IDFdhtsK8GxvmSIu/GHi5a4q9lO+kyArIDp9t/4ACEZ0fFHBIzbKQ5iAQPiqWxrZP/1lvF88b7dSDOnFD38REnk+DVwi6hxtACCSfcv3pkJdckkErqU07yXHIcgM3JLYXMcC8ex8V8KRT5Y9HQ=
- before_script: ./publish/bintray.sh
- script: sbt test +publishSigned
+language: scala
+scala:
+- 2.10.4
+jdk:
+- oraclejdk7
+env:
+  global:
+  - LIB_VERSION=$TRAVIS_BUILD_NUMBER
+  - secure: O3BiQeEXVXrk+1WJJOdCum/S1AxXy2G+MEadfyoxdn6zBQ0X5bGggp2pnTBbDRPWKkACaGRQH3HJUlldDLk3TTMPDXLlcoBdRK2t5u4K2GTwO+J1RE+wuMyScSX/4AvG6RAFoR7Hl+bUIesYuhotBs7QCg0lgTd7s7c9jTUuBW8=
+  - secure: RDgI7fqZc6HckQzDQwtB9PxVXQEch4jbyCd5YT6DvQi/EEJI01rXk9GI69seF2NCvTDYBpKmx77AwxbXy5xAg0lsfeSQjmwu/d5u+ytyXyz+Z1NIABDP7qBzVMuVzRofwz02b2hnNuj9JDaZD8Hzr53/TX7Wy5KUbEugT4GDFeo=
+  - secure: PFZhwmKsizYud58iM3pJo5Ae3IDFdhtsK8GxvmSIu/GHi5a4q9lO+kyArIDp9t/4ACEZ0fFHBIzbKQ5iAQPiqWxrZP/1lvF88b7dSDOnFD38REnk+DVwi6hxtACCSfcv3pkJdckkErqU07yXHIcgM3JLYXMcC8ex8V8KRT5Y9HQ=
+before_script: ./publish/bintray.sh
+script: sbt test +publishSigned
+notifications:
+  slack:
+    secure: mjXqKV9Jf0nhqsSPeVq8cm9SgCPc8kr9cmhnrXEew5c+nL5hf91EJQiOAra/Njp6GFmBBACFtOMHvQ6EQ1yiYrqnBFPYFDkgFX/BguyF8l+z7rOw5Ao2nmIGha/sWy1UBhucOQUMq0/XnB2RHzvmixiiKGfyUTqODBArEYVIXaE=

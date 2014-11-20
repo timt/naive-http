@@ -6,6 +6,7 @@ import io.shaka.http.HttpHeader.CONTENT_TYPE
 object Response {
   def respond(content: String): Response = Response().entity(content)
   def respond(content: Array[Byte]): Response = Response().entity(content)
+  val ok = Response().status(OK)
 }
 
 case class Response(status: Status = OK, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

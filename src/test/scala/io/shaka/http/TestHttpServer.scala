@@ -1,15 +1,8 @@
 package io.shaka.http
 
-import javax.servlet.http.HttpServletRequest
-
 import unfiltered.filter.Planify
-import unfiltered.request.{HttpRequest, Seg, Path}
+import unfiltered.request.{Path, Seg}
 import unfiltered.response._
-import unfiltered.jetty
-import unfiltered.response.ResponseHeader
-import unfiltered.response.ResponseString
-import java.io.FileInputStream
-import IO.inputStreamToByteArray
 
 
 object TestHttpServer {

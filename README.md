@@ -15,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "60"
+    libraryDependencies += "io.shaka" %% "naive-http" % "64"
 
 Start hacking
 
@@ -34,6 +34,10 @@ Start hacking
     ...
     //Post form parameters
     val response = http(POST("http://some/json/server").entity("""{"foo":"bar"}""").formParameters(FormParameter("name","value")))
+    ...
+    //Specify a timeout in milli seconds (same value used for both connect and read)
+    implicit val timeout = Timeout(1000)
+    val response = http(GET("http://www.google.com"))
     ...
     //Specify a proxy
     implicit val proxy = io.shaka.http.proxy("my.proxy.server", 8080)

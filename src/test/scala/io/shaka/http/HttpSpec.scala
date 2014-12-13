@@ -4,7 +4,7 @@ import java.io.FileInputStream
 
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
 import io.shaka.http.FormParameters.FormParameters
-import io.shaka.http.Http.http
+import io.shaka.http.Http.{Timeout, http}
 import io.shaka.http.HttpHeader.{CONTENT_TYPE, ETAG, USER_AGENT}
 import io.shaka.http.IO._
 import io.shaka.http.Request.{GET, POST}

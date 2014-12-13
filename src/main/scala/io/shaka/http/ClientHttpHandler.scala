@@ -10,7 +10,7 @@ import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Status._
 import io.shaka.http.proxy.{Proxy, noProxy}
 
-class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[HttpsKeyStore] = None) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[HttpsKeyStore] = None, timeout: Timeout = infiniteTimeout) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)
@@ -48,10 +48,9 @@ class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[HttpsKeyStore] 
   protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
     keyStore.foreach(ks => connection.asInstanceOf[HttpsURLConnection].setSSLSocketFactory(sslFactory(ks)))
-    val timeoutInMillis = 0
     connection.setUseCaches(false)
-    connection.setConnectTimeout(timeoutInMillis)
-    connection.setReadTimeout(timeoutInMillis)
+    connection.setConnectTimeout(timeout.millis)
+    connection.setReadTimeout(timeout.millis)
     connection.setInstanceFollowRedirects(false)
     connection
   }

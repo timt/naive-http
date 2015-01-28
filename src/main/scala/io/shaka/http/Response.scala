@@ -1,11 +1,12 @@
 package io.shaka.http
 
-import io.shaka.http.Status.OK
-import io.shaka.http.HttpHeader.CONTENT_TYPE
+import io.shaka.http.Status.{SEE_OTHER, OK}
+import io.shaka.http.HttpHeader.{LOCATION, CONTENT_TYPE}
 
 object Response {
   def respond(content: String): Response = Response().entity(content)
   def respond(content: Array[Byte]): Response = Response().entity(content)
+  def seeOther(url: String): Response = respond("").status(SEE_OTHER).header(LOCATION, url)
   val ok = Response().status(OK)
 }
 

@@ -11,6 +11,3 @@ env:
   - secure: PFZhwmKsizYud58iM3pJo5Ae3IDFdhtsK8GxvmSIu/GHi5a4q9lO+kyArIDp9t/4ACEZ0fFHBIzbKQ5iAQPiqWxrZP/1lvF88b7dSDOnFD38REnk+DVwi6hxtACCSfcv3pkJdckkErqU07yXHIcgM3JLYXMcC8ex8V8KRT5Y9HQ=
 before_script: ./publish/bintray.sh
 script: sbt test +publishSigned
-notifications:
-  slack:
-    secure: mjXqKV9Jf0nhqsSPeVq8cm9SgCPc8kr9cmhnrXEew5c+nL5hf91EJQiOAra/Njp6GFmBBACFtOMHvQ6EQ1yiYrqnBFPYFDkgFX/BguyF8l+z7rOw5Ao2nmIGha/sWy1UBhucOQUMq0/XnB2RHzvmixiiKGfyUTqODBArEYVIXaE=

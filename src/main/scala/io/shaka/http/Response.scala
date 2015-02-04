@@ -1,6 +1,6 @@
 package io.shaka.http
 
-import io.shaka.http.Status.{SEE_OTHER, OK}
+import io.shaka.http.Status.{NOT_FOUND, SEE_OTHER, OK}
 import io.shaka.http.HttpHeader.{LOCATION, CONTENT_TYPE}
 
 object Response {
@@ -8,6 +8,7 @@ object Response {
   def respond(content: Array[Byte]): Response = Response().entity(content)
   def seeOther(url: String): Response = respond("").status(SEE_OTHER).header(LOCATION, url)
   val ok = Response().status(OK)
+  val notFound = Response().status(NOT_FOUND)
 }
 
 case class Response(status: Status = OK, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

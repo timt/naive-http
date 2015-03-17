@@ -5,12 +5,12 @@ import javax.net.ssl.HttpsURLConnection
 
 import io.shaka.http.Headers.toHeaders
 import io.shaka.http.Http._
-import io.shaka.http.Https.{sslFactory, HttpsKeyStore}
+import io.shaka.http.Https.{sslFactory, hostNameVerifier, KeyStore}
 import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Status._
 import io.shaka.http.proxy.{Proxy, noProxy}
 
-class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[HttpsKeyStore] = None, timeout: Timeout = infiniteTimeout) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = None, timeout: Timeout = infiniteTimeout) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)
@@ -47,7 +47,10 @@ class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[HttpsKeyStore] 
 
   protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
-    keyStore.foreach(ks => connection.asInstanceOf[HttpsURLConnection].setSSLSocketFactory(sslFactory(ks)))
+    keyStore.foreach(ks => {
+      connection.asInstanceOf[HttpsURLConnection].setSSLSocketFactory(sslFactory(ks))
+      connection.asInstanceOf[HttpsURLConnection].setHostnameVerifier(hostNameVerifier(ks))
+    })
     connection.setUseCaches(false)
     connection.setConnectTimeout(timeout.millis)
     connection.setReadTimeout(timeout.millis)

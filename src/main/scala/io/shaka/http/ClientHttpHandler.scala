@@ -10,7 +10,7 @@ import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Status._
 import io.shaka.http.proxy.{Proxy, noProxy}
 
-class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = None, timeout: Timeout = infiniteTimeout) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = None, timeout: Timeout = tenSecondTimeout) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)

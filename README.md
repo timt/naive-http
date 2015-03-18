@@ -49,6 +49,11 @@ Start hacking
     import io.shaka.http.Https.TrustAllSslCertificates
     TrustAllSslCertificates
     ...
+    //Trust all SSL certificates (non-globally)
+    import io.shaka.http.Https.TrustingKeyStore
+    implicit val https = Some(TrustingKeyStore("TLS"))
+    val response = http(GET("https://someurl"))
+    ...
     //Use a key store
     import io.shaka.http.Https.HttpsKeyStore
     implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))

@@ -15,7 +15,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "69"
+    libraryDependencies += "io.shaka" %% "naive-http" % "70"
 
 Start hacking
 
@@ -58,7 +58,9 @@ Start hacking
     import io.shaka.http.Https.HttpsKeyStore
     implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))
     val response = http(GET("https://someurl"))
-
+    ...
+    //Basic auth
+    val response = http(GET("https://someurl").basicAuth("me","myPassword"))
 
 
 For more examples see 

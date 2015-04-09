@@ -1,10 +1,11 @@
 package io.shaka.http
 
-import io.shaka.http.Http._
-import io.shaka.http.HttpHeader.{ACCEPT, CONTENT_TYPE}
+import javax.xml.bind.DatatypeConverter.printBase64Binary
+
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 import io.shaka.http.FormParameters.{fromEntity, toEntity}
-import scala.Some
+import io.shaka.http.Http._
+import io.shaka.http.HttpHeader.{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 
 
 object Request {
@@ -56,6 +57,9 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
   def entityAsString: String = entity match {
     case Some(value) => value.toString
     case _ => throw new RuntimeException("There is no entity in this request! Consider using request.entity:Option[Entity] instead.")
+  }
+  def basicAuth(user: String, password: String): Request = {
+    header(AUTHORIZATION, "Basic " + printBase64Binary(s"$user:$password".getBytes))
   }
 }
 

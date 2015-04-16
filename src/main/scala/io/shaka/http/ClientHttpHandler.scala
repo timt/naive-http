@@ -47,10 +47,12 @@ class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = Non
 
   protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
-    keyStore.foreach(ks => {
-      connection.asInstanceOf[HttpsURLConnection].setSSLSocketFactory(sslFactory(ks))
-      connection.asInstanceOf[HttpsURLConnection].setHostnameVerifier(hostNameVerifier(ks))
-    })
+    (connection, keyStore) match {
+      case (c: HttpsURLConnection, Some(ks)) =>
+        c.setSSLSocketFactory(sslFactory(ks))
+        c.setHostnameVerifier(hostNameVerifier(ks))
+      case _ =>
+    }
     connection.setUseCaches(false)
     connection.setConnectTimeout(timeout.millis)
     connection.setReadTimeout(timeout.millis)

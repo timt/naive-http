@@ -50,7 +50,7 @@ class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig]
     (connection, httpsConfig) match {
       case (c: HttpsURLConnection, Some(config)) =>
         c.setSSLSocketFactory(sslFactory(config))
-        c.setHostnameVerifier(hostNameVerifier(config))
+        c.setHostnameVerifier(hostNameVerifier(config.trustStoreConfig))
       case _ =>
     }
     connection.setUseCaches(false)

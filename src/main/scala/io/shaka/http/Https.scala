@@ -8,23 +8,25 @@ import javax.net.ssl._
 object Https {
   private val defaultProtocol = "TLS"
 
-  trait HttpsConfig { def protocol: String }
-  case class TrustServersByTrustStore(path: String, password: String, protocol: String = defaultProtocol) extends HttpsConfig
-  case class TrustAnyServer(protocol: String = defaultProtocol) extends HttpsConfig
+  trait TrustStoreConfig
+  case class TrustServersByTrustStore(path: String, password: String) extends TrustStoreConfig
+  case object TrustAnyServer extends TrustStoreConfig
+
+  case class HttpsConfig(trustStoreConfig: TrustStoreConfig, protocol: String = defaultProtocol)
 
   def sslFactory(httpsConfig: HttpsConfig): SSLSocketFactory = {
     val sslContext = SSLContext.getInstance(httpsConfig.protocol)
-    sslContext.init(null, trustManagers(httpsConfig), new java.security.SecureRandom)
+    sslContext.init(null, trustManagers(httpsConfig.trustStoreConfig), new java.security.SecureRandom)
     sslContext.getSocketFactory
   }
 
-  def hostNameVerifier(keyStore: HttpsConfig): HostnameVerifier = keyStore match {
-    case _: TrustServersByTrustStore ⇒ HttpsURLConnection.getDefaultHostnameVerifier
-    case _: TrustAnyServer ⇒ TrustAllSslCertificates.allHostsValid
+  def hostNameVerifier(trustStoreConfig: TrustStoreConfig): HostnameVerifier = trustStoreConfig match {
+    case TrustServersByTrustStore(_, _) ⇒ HttpsURLConnection.getDefaultHostnameVerifier
+    case TrustAnyServer ⇒ TrustAllSslCertificates.allHostsValid
   }
 
-  private def trustManagers(keyStore: HttpsConfig): Array[TrustManager] = keyStore match {
-    case TrustServersByTrustStore(path, password, _) ⇒
+  private def trustManagers(trustStoreConfig: TrustStoreConfig): Array[TrustManager] = trustStoreConfig match {
+    case TrustServersByTrustStore(path, password) ⇒
       val inputStream = new FileInputStream(path)
       val trustStore: JKeyStore = JKeyStore.getInstance(JKeyStore.getDefaultType)
       trustStore.load(inputStream, password.toCharArray)
@@ -32,7 +34,7 @@ object Https {
       val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm)
       trustManagerFactory.init(trustStore)
       trustManagerFactory.getTrustManagers
-    case _: TrustAnyServer ⇒ TrustAllSslCertificates.trustAllCerts
+    case TrustAnyServer ⇒ TrustAllSslCertificates.trustAllCerts
   }
 
   object TrustAllSslCertificates {

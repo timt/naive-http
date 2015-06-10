@@ -48,9 +48,9 @@ class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig]
   protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
     (connection, httpsConfig) match {
-      case (c: HttpsURLConnection, Some(ks)) =>
-        c.setSSLSocketFactory(sslFactory(ks))
-        c.setHostnameVerifier(hostNameVerifier(ks))
+      case (c: HttpsURLConnection, Some(config)) =>
+        c.setSSLSocketFactory(sslFactory(config))
+        c.setHostnameVerifier(hostNameVerifier(config))
       case _ =>
     }
     connection.setUseCaches(false)

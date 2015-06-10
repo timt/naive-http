@@ -6,10 +6,11 @@ import java.security.cert.X509Certificate
 import javax.net.ssl._
 
 object Https {
+  private val defaultProtocol = "TLS"
 
   trait HttpsConfig { def protocol: String }
-  case class TrustServersByTrustStore(path: String, password: String, protocol: String = "TLS") extends HttpsConfig
-  case class TrustAnyServer(protocol: String = "SSL") extends HttpsConfig
+  case class TrustServersByTrustStore(path: String, password: String, protocol: String = defaultProtocol) extends HttpsConfig
+  case class TrustAnyServer(protocol: String = defaultProtocol) extends HttpsConfig
 
   def sslFactory(httpsConfig: HttpsConfig): SSLSocketFactory = {
     val sslContext = SSLContext.getInstance(httpsConfig.protocol)
@@ -41,7 +42,7 @@ object Https {
       def checkServerTrusted(certs: Array[X509Certificate], authType: String) {}
     })
 
-    val sc = SSLContext.getInstance("SSL")
+    val sc = SSLContext.getInstance(defaultProtocol)
     sc.init(null, trustAllCerts, new java.security.SecureRandom)
 
     val allHostsValid = new HostnameVerifier {

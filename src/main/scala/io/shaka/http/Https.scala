@@ -7,32 +7,31 @@ import javax.net.ssl._
 
 object Https {
 
-  trait KeyStore { def protocol: String }
-  case class HttpsKeyStore(path: String, password: String, protocol: String = "TLS") extends KeyStore
-  case class TrustingKeyStore(protocol: String = "SSL") extends KeyStore
+  trait HttpsConfig { def protocol: String }
+  case class TrustServersByTrustStore(path: String, password: String, protocol: String = "TLS") extends HttpsConfig
+  case class TrustAnyServer(protocol: String = "SSL") extends HttpsConfig
 
-  def sslFactory(keyStore: KeyStore): SSLSocketFactory = {
-    val sslContext = SSLContext.getInstance(keyStore.protocol)
-    sslContext.init(null, trustManagers(keyStore), new java.security.SecureRandom)
+  def sslFactory(httpsConfig: HttpsConfig): SSLSocketFactory = {
+    val sslContext = SSLContext.getInstance(httpsConfig.protocol)
+    sslContext.init(null, trustManagers(httpsConfig), new java.security.SecureRandom)
     sslContext.getSocketFactory
   }
 
-  def hostNameVerifier(keyStore: KeyStore): HostnameVerifier = keyStore match {
-    case _: HttpsKeyStore ⇒ HttpsURLConnection.getDefaultHostnameVerifier
-    case _: TrustingKeyStore ⇒ TrustAllSslCertificates.allHostsValid
+  def hostNameVerifier(keyStore: HttpsConfig): HostnameVerifier = keyStore match {
+    case _: TrustServersByTrustStore ⇒ HttpsURLConnection.getDefaultHostnameVerifier
+    case _: TrustAnyServer ⇒ TrustAllSslCertificates.allHostsValid
   }
 
-  private def trustManagers(keyStore: KeyStore): Array[TrustManager] = keyStore match {
-    case HttpsKeyStore(path, password, _) ⇒ {
-      val keyStoreInputStream = new FileInputStream(path)
-      val keyStore: JKeyStore = JKeyStore.getInstance(JKeyStore.getDefaultType)
-      keyStore.load(keyStoreInputStream, password.toCharArray)
+  private def trustManagers(keyStore: HttpsConfig): Array[TrustManager] = keyStore match {
+    case TrustServersByTrustStore(path, password, _) ⇒
+      val inputStream = new FileInputStream(path)
+      val trustStore: JKeyStore = JKeyStore.getInstance(JKeyStore.getDefaultType)
+      trustStore.load(inputStream, password.toCharArray)
 
       val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm)
-      trustManagerFactory.init(keyStore)
+      trustManagerFactory.init(trustStore)
       trustManagerFactory.getTrustManagers
-    }
-    case _: TrustingKeyStore ⇒ TrustAllSslCertificates.trustAllCerts
+    case _: TrustAnyServer ⇒ TrustAllSslCertificates.trustAllCerts
   }
 
   object TrustAllSslCertificates {
@@ -52,6 +51,4 @@ object Https {
     HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory)
     HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
   }
-
-
 }

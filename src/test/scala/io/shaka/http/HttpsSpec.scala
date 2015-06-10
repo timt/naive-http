@@ -1,6 +1,6 @@
 package io.shaka.http
 
-import io.shaka.http.Https.{TrustAllSslCertificates, HttpsKeyStore, TrustingKeyStore}
+import io.shaka.http.Https.{TrustAllSslCertificates, TrustServersByTrustStore, TrustAnyServer}
 import io.shaka.http.Request.GET
 import io.shaka.http.Status.OK
 import io.shaka.http.TestHttpServer.withHttpsServer
@@ -13,7 +13,7 @@ class HttpsSpec extends FunSuite with BeforeAndAfterEach {
 
   test("https works with https keystore") {
     withHttpsServer{server =>
-      implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))
+      implicit val https = Some(TrustServersByTrustStore("src/test/resources/certs/keystore-testing.jks", "password"))
       val expected = "helloworld"
       val response = Http.http(GET(server.toUrl(expected)))
       assert(response.status === OK)
@@ -23,7 +23,7 @@ class HttpsSpec extends FunSuite with BeforeAndAfterEach {
 
   test("http ignores https keystore") {
     withServer{server =>
-      implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))
+      implicit val https = Some(TrustServersByTrustStore("src/test/resources/certs/keystore-testing.jks", "password"))
       val expected = "helloworld"
       val url: String = server.toUrl(expected)
       assert(url.startsWith("http://"))
@@ -35,7 +35,7 @@ class HttpsSpec extends FunSuite with BeforeAndAfterEach {
 
   test("https works with trusting keystore") {
     withHttpsServer{server =>
-      implicit val https = Some(TrustingKeyStore("TLS"))
+      implicit val https = Some(TrustAnyServer("TLS"))
       val expected = "helloworld"
       val response = Http.http(GET(server.toUrl(expected)))
       assert(response.status === OK)

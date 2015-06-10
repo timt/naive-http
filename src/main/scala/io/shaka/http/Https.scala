@@ -11,12 +11,16 @@ object Https {
   trait TrustStoreConfig
   case class TrustServersByTrustStore(path: String, password: String) extends TrustStoreConfig
   case object TrustAnyServer extends TrustStoreConfig
+  
+  trait KeyStoreConfig
+  case class UseKeyStore(path: String, password: String) extends KeyStoreConfig
+  case object DoNotUseKeyStore extends KeyStoreConfig
 
-  case class HttpsConfig(trustStoreConfig: TrustStoreConfig, protocol: String = defaultProtocol)
+  case class HttpsConfig(trustStoreConfig: TrustStoreConfig, keyStoreConfig: KeyStoreConfig = DoNotUseKeyStore, protocol: String = defaultProtocol)
 
   def sslFactory(httpsConfig: HttpsConfig): SSLSocketFactory = {
     val sslContext = SSLContext.getInstance(httpsConfig.protocol)
-    sslContext.init(null, trustManagers(httpsConfig.trustStoreConfig), new java.security.SecureRandom)
+    sslContext.init(keyManagers(httpsConfig.keyStoreConfig), trustManagers(httpsConfig.trustStoreConfig), new java.security.SecureRandom)
     sslContext.getSocketFactory
   }
 
@@ -35,6 +39,19 @@ object Https {
       trustManagerFactory.init(trustStore)
       trustManagerFactory.getTrustManagers
     case TrustAnyServer ⇒ TrustAllSslCertificates.trustAllCerts
+  }
+
+  private def keyManagers(keyStoreConfig: KeyStoreConfig): Array[KeyManager] = keyStoreConfig match {
+    case UseKeyStore(path, password) ⇒
+      val inputStream = new FileInputStream(path)
+      val keyStore: JKeyStore = JKeyStore.getInstance(JKeyStore.getDefaultType)
+      keyStore.load(inputStream, password.toCharArray)
+
+      val keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm)
+      keyManagerFactory.init(keyStore, password.toCharArray)
+      keyManagerFactory.getKeyManagers
+
+    case DoNotUseKeyStore ⇒ null
   }
 
   object TrustAllSslCertificates {

@@ -45,4 +45,5 @@ For more examples see
 
 * [HttpServerSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpServerSpec.scala)
 * [ServingStaticResourcesSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/ServingStaticResourcesSpec.scala)
+* [HttpsSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpsSpec.scala)
 

@@ -1,7 +1,6 @@
 naive-http  [![Build Status](https://travis-ci.org/timt/naive-http.png?branch=master)](https://travis-ci.org/timt/naive-http) [ ![Download](https://api.bintray.com/packages/timt/repo/naive-http/images/download.png) ](https://bintray.com/timt/repo/naive-http/_latestVersion)
 ==========
-A really simple http client library implemented in scala with no dependencies
-
+A really simple http library implemented in scala with no dependencies
 
 Requirements
 ------------
@@ -9,13 +8,13 @@ Requirements
 * [scala](http://www.scala-lang.org) 2.10.4
 * [scala](http://www.scala-lang.org) 2.11.2
 
-Usage
------
+Client Usage
+------------
 Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "70"
+    libraryDependencies += "io.shaka" %% "naive-http" % "73"
 
 Start hacking
 
@@ -67,6 +66,10 @@ For more examples see
 
 * [HttpSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 * [HttpsSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpsSpec.scala)
+
+Server Usage
+------------
+see [SERVER_README.md](SERVER_README.md)
 
 
 Code license

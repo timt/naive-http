@@ -8,9 +8,10 @@ import io.shaka.http.HttpServer.ToLog
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.NOT_FOUND
 
-class HttpServer(private val usePort:Int = 0, otherLog: ToLog) {
+class HttpServer(private val usePort: Int = 0, otherLog: ToLog) {
+  import HttpServer.createServer
 
-  val server =  SunHttpServer.create(new InetSocketAddress(usePort), 0)
+  val server = createServer(usePort)
   server.setExecutor(null)
   server.createContext("/", new SunHttpHandlerAdapter((req) => respond("No handler defined!").status(NOT_FOUND)))
 
@@ -34,7 +35,6 @@ class HttpServer(private val usePort:Int = 0, otherLog: ToLog) {
     server.createContext("/", new SunHttpHandlerAdapter(handler))
     this
   }
-
 }
 
 object HttpServer {
@@ -44,4 +44,6 @@ object HttpServer {
   def apply(): HttpServer = apply(0)
   def apply(port: Int): HttpServer = new HttpServer(port, printlnLog)
   def apply(handler: HttpHandler, port: Int = 0, log: ToLog = printlnLog): HttpServer = new HttpServer(port, log).handler(handler)
+
+  private def createServer(requestedPort: Int) = SunHttpServer.create(new InetSocketAddress(requestedPort), 0)
 }

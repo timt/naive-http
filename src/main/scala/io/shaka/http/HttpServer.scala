@@ -48,7 +48,7 @@ object HttpServer {
 
   private def createServer(requestedPort: Int): SunHttpServer = {
     val address: InetSocketAddress = new InetSocketAddress(requestedPort)
-    val httpsServerProvider: HttpServerProvider = HttpServerProvider.provider()
-    httpsServerProvider.createHttpServer(address, 0)
+    val httpServerProvider: HttpServerProvider = HttpServerProvider.provider()
+    httpServerProvider.createHttpServer(address, 0)
   }
 }

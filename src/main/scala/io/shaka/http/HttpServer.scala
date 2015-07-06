@@ -2,6 +2,7 @@ package io.shaka.http
 
 import java.net.InetSocketAddress
 
+import com.sun.net.httpserver.spi.HttpServerProvider
 import com.sun.net.httpserver.{HttpServer => SunHttpServer}
 import io.shaka.http.Http.HttpHandler
 import io.shaka.http.HttpServer.ToLog
@@ -45,5 +46,9 @@ object HttpServer {
   def apply(port: Int): HttpServer = new HttpServer(port, printlnLog)
   def apply(handler: HttpHandler, port: Int = 0, log: ToLog = printlnLog): HttpServer = new HttpServer(port, log).handler(handler)
 
-  private def createServer(requestedPort: Int) = SunHttpServer.create(new InetSocketAddress(requestedPort), 0)
+  private def createServer(requestedPort: Int): SunHttpServer = {
+    val address: InetSocketAddress = new InetSocketAddress(requestedPort)
+    val httpsServerProvider: HttpServerProvider = HttpServerProvider.provider()
+    httpsServerProvider.createHttpServer(address, 0)
+  }
 }

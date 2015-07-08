@@ -27,8 +27,6 @@ trait Ssl2 { self: Ssl =>
   override val keyStorePassword: String = ""
 }
 
-case class PathAndPassword(path: String, password: String)
-
 case class HttpsWithMutualAuth(port: Int, host: String, ks: PathAndPassword, ts: PathAndPassword) extends Server with Ssl  {
   override lazy val keyStore: String = ks.path
   override lazy val keyStorePassword: String = ks.password

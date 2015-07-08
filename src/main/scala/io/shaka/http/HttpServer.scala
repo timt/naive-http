@@ -87,7 +87,7 @@ object HttpServer {
   }
 }
 
-case class PathAndPassword(path: String, password: String) // TODO: Use client's
+case class PathAndPassword(path: String, password: String)
 
 sealed trait HttpServerSslConfig
 case object NoSsl extends HttpServerSslConfig

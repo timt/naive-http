@@ -6,6 +6,7 @@ import io.shaka.http.Https.{DoNotUseKeyStore, HttpsConfig, TrustServersByTrustSt
 import io.shaka.http.Request.GET
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.OK
+import io.shaka.http.TestCerts.{keyStoreWithClientCert, keyStoreWithServerCert, trustStoreWithClientCert, trustStoreWithServerCert}
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 
@@ -14,8 +15,8 @@ class MutualSslAuthSpec extends FunSuite with BeforeAndAfterAll {
 
   test("Client can connect to server doing mutual SSL auth") {
     val response = Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
-      TrustServersByTrustStore("client-truststore.jks", "password"),
-      UseKeyStore("src/test/resources/certs/keystore-testing-client.jks", "password")
+      TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
+      UseKeyStore(keyStoreWithClientCert.path, keyStoreWithClientCert.password)
     )))
 
     assert(statusAndBody(response) === (OK, Some("Hello world")))
@@ -24,7 +25,7 @@ class MutualSslAuthSpec extends FunSuite with BeforeAndAfterAll {
   test("Client cannot connect to server doing mutual SSL auth without specifying client certificate"){
     intercept[SSLHandshakeException]{
       Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
-        TrustServersByTrustStore("client-truststore.jks", "password"),
+        TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
         DoNotUseKeyStore
       )))
     }
@@ -32,8 +33,8 @@ class MutualSslAuthSpec extends FunSuite with BeforeAndAfterAll {
 
   override protected def beforeAll() = {
     server = HttpServer.httpsMutualAuth(
-      keyStoreConfig = PathAndPassword("src/test/resources/certs/keystore-testing.jks", "password"),
-      trustStoreConfig = PathAndPassword("server-truststore.jks", "password")).handler(_ => respond("Hello world")).start()
+      keyStoreConfig = PathAndPassword(keyStoreWithServerCert.path, keyStoreWithServerCert.password),
+      trustStoreConfig = PathAndPassword(trustStoreWithClientCert.path, trustStoreWithClientCert.password)).handler(_ => respond("Hello world")).start()
   }
 
   override protected def afterAll() = {

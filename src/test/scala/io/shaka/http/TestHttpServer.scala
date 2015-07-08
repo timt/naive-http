@@ -1,5 +1,6 @@
 package io.shaka.http
 
+import io.shaka.http.TestCerts.keyStoreWithServerCert
 import unfiltered.filter.Planify
 import unfiltered.request.{Path, Seg}
 import unfiltered.response._
@@ -12,8 +13,8 @@ object TestHttpServer {
     server.stop()
   }
   def withHttpsServer(block: TestHttpServer => Unit) = {
-    System.setProperty("jetty.ssl.keyStore", "src/test/resources/certs/keystore-testing.jks")
-    System.setProperty("jetty.ssl.keyStorePassword", "password")
+    System.setProperty("jetty.ssl.keyStore", keyStoreWithServerCert.path)
+    System.setProperty("jetty.ssl.keyStorePassword", keyStoreWithServerCert.password)
     val server = new TestHttpServer(unfiltered.jetty.Https.anylocal).start()
     block(server)
     server.stop()

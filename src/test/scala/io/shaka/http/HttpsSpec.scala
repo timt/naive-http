@@ -3,6 +3,7 @@ package io.shaka.http
 import io.shaka.http.Https.{HttpsConfig, TrustAllSslCertificates, TrustServersByTrustStore, TrustAnyServer}
 import io.shaka.http.Request.GET
 import io.shaka.http.Status.OK
+import io.shaka.http.TestCerts.keyStoreWithServerCert
 import io.shaka.http.TestHttpServer.withHttpsServer
 import io.shaka.http.TestHttpServer.withServer
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
@@ -13,7 +14,7 @@ class HttpsSpec extends FunSuite with BeforeAndAfterEach {
 
   test("https works with https keystore") {
     withHttpsServer{server =>
-      implicit val https: Option[HttpsConfig] = Some(HttpsConfig(TrustServersByTrustStore("src/test/resources/certs/keystore-testing.jks", "password")))
+      implicit val https: Option[HttpsConfig] = Some(HttpsConfig(TrustServersByTrustStore(keyStoreWithServerCert.path, keyStoreWithServerCert.password)))
       val expected = "helloworld"
       val response = Http.http(GET(server.toUrl(expected)))
       assert(response.status === OK)
@@ -23,7 +24,7 @@ class HttpsSpec extends FunSuite with BeforeAndAfterEach {
 
   test("http ignores https keystore") {
     withServer{server =>
-      implicit val https: Option[HttpsConfig] = Some(HttpsConfig(TrustServersByTrustStore("src/test/resources/certs/keystore-testing.jks", "password")))
+      implicit val https: Option[HttpsConfig] = Some(HttpsConfig(TrustServersByTrustStore(keyStoreWithServerCert.path, keyStoreWithServerCert.password)))
       val expected = "helloworld"
       val url: String = server.toUrl(expected)
       assert(url.startsWith("http://"))

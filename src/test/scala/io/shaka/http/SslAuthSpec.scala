@@ -4,6 +4,7 @@ import io.shaka.http.Https.{DoNotUseKeyStore, HttpsConfig, TrustServersByTrustSt
 import io.shaka.http.Request.GET
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.OK
+import io.shaka.http.TestCerts._
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 
@@ -12,16 +13,16 @@ class SslAuthSpec extends FunSuite with BeforeAndAfterAll {
 
   test("Client can connect to server on SSL when the client specifies a certificate"){
     val response = Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
-      TrustServersByTrustStore("client-truststore.jks", "password"),
-      UseKeyStore("src/test/resources/certs/keystore-testing-client.jks", "password"))
-    ))
+      TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
+      UseKeyStore(keyStoreWithClientCert.path, keyStoreWithClientCert.password)
+    )))
 
     assert(statusAndBody(response) === (OK, Some("Hello world")))
   }
 
   test("Client can connect to server on SSL when the client does not specify a certificate"){
     val response: Response = Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
-      TrustServersByTrustStore("client-truststore.jks", "password"),
+      TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
       DoNotUseKeyStore
     )))
 
@@ -30,7 +31,7 @@ class SslAuthSpec extends FunSuite with BeforeAndAfterAll {
 
   override protected def beforeAll() = {
     server = HttpServer.https(
-      keyStoreConfig = PathAndPassword("src/test/resources/certs/keystore-testing.jks", "password")
+      keyStoreConfig = PathAndPassword(keyStoreWithServerCert.path, keyStoreWithServerCert.password)
     ).handler(_ => respond("Hello world")).start()
   }
 

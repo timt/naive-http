@@ -12,10 +12,10 @@ import io.shaka.http.HttpServer.ToLog
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.NOT_FOUND
 
-class HttpServer(private val usePort: Int = 0, otherLog: ToLog, maybeHttps: HttpServerSslConfig = NoSsl) {
+class HttpServer(private val usePort: Int = 0, otherLog: ToLog, sslConfig: HttpServerSslConfig = NoSsl) {
   import HttpServer.createServer
 
-  val server = createServer(usePort, maybeHttps)
+  val server = createServer(usePort, sslConfig)
   server.setExecutor(null)
   server.createContext("/", new SunHttpHandlerAdapter((req) => respond("No handler defined!").status(NOT_FOUND)))
 

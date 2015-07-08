@@ -5,12 +5,12 @@ import javax.net.ssl.HttpsURLConnection
 
 import io.shaka.http.Headers.toHeaders
 import io.shaka.http.Http._
-import io.shaka.http.Https.{sslFactory, hostNameVerifier}
+import io.shaka.http.Https.{HttpsConfig, sslFactory, hostNameVerifier}
 import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Status._
 import io.shaka.http.proxy.{Proxy, noProxy}
 
-class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[io.shaka.http.Https.HttpsConfig] = None, timeout: Timeout = tenSecondTimeout) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig] = None, timeout: Timeout = tenSecondTimeout) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)

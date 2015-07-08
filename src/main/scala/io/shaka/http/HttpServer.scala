@@ -12,7 +12,7 @@ import io.shaka.http.HttpServer.ToLog
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.NOT_FOUND
 
-class HttpServer(private val usePort: Int = 0, otherLog: ToLog, maybeHttps: Option[HttpsConfig] = None) {
+class HttpServer(private val usePort: Int = 0, otherLog: ToLog, maybeHttps: HttpServerSslConfig = NoSsl) {
   import HttpServer.createServer
 
   val server = createServer(usePort, maybeHttps)
@@ -49,15 +49,16 @@ object HttpServer {
   def apply(port: Int): HttpServer = new HttpServer(port, printlnLog)
   def apply(handler: HttpHandler, port: Int = 0, log: ToLog = printlnLog): HttpServer = new HttpServer(port, log).handler(handler)
 
-  def https(httpsConfig: HttpsConfig, port: Int = 0) = new HttpServer(port, printlnLog, Some(httpsConfig))
+  def httpsMutualAuth(keyStoreConfig: PathAndPassword, trustStoreConfig: PathAndPassword, port: Int = 0) =
+    new HttpServer(port, printlnLog, SslMutualAuth(keyStoreConfig, trustStoreConfig))
 
-  private def createServer(requestedPort: Int, maybeHttps: Option[HttpsConfig]): SunHttpServer = {
+  private def createServer(requestedPort: Int, sslConfig: HttpServerSslConfig): SunHttpServer = {
     val address: InetSocketAddress = new InetSocketAddress(requestedPort)
     val httpServerProvider: HttpServerProvider = HttpServerProvider.provider()
 
-    maybeHttps match {
-      case None => httpServerProvider.createHttpServer(address, 0)
-      case Some(HttpsConfig(ksConfig, tsConfig)) =>
+    sslConfig match {
+      case NoSsl => httpServerProvider.createHttpServer(address, 0)
+      case SslMutualAuth(ksConfig, tsConfig) =>
 
         val ks: KeyStore = KeyStore.getInstance("JKS")
         ks.load(new FileInputStream(ksConfig.path), ksConfig.password.toCharArray)
@@ -87,4 +88,7 @@ object HttpServer {
 }
 
 case class PathAndPassword(path: String, password: String) // TODO: Use client's
-case class HttpsConfig(keyStoreConfig: PathAndPassword, trustStoreConfig: PathAndPassword)
+
+sealed trait HttpServerSslConfig
+case object NoSsl extends HttpServerSslConfig
+case class SslMutualAuth(keyStoreConfig: PathAndPassword, trustStoreConfig: PathAndPassword) extends HttpServerSslConfig

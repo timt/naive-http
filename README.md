@@ -49,13 +49,21 @@ Start hacking
     TrustAllSslCertificates
     ...
     //Trust all SSL certificates (non-globally)
-    import io.shaka.http.Https.TrustingKeyStore
-    implicit val https = Some(TrustingKeyStore("TLS"))
+    import io.shaka.http.Https.HttpsConfig
+    implicit val https: Option[HttpsConfig] = Some(HttpsConfig(TrustAnyServer))
     val response = http(GET("https://someurl"))
     ...
-    //Use a key store
-    import io.shaka.http.Https.HttpsKeyStore
-    implicit val https = Some(HttpsKeyStore("src/test/resources/certs/keystore-testing.jks", "password"))
+    //Use a trust store containing all the certificates that the client trusts
+    import io.shaka.http.Https.TrustServersByTrustStore
+    implicit val https = HttpsConfig(TrustServersByTrustStore("src/test/resources/certs/server-truststore.jks", "password"))
+    val response = http(GET("https://someurl"))
+    ...
+    //Use a key store containing the client certificate for connecting to http servers using SSL mutual-auth
+    import io.shaka.http.Https.UseKeyStore
+    implicit val mutualSslAuth: Option[HttpsConfig] = Some(HttpsConfig(
+      TrustServersByTrustStore("src/test/resources/certs/server-truststore.jks", "password"),
+      UseKeyStore("src/test/resources/certs/keystore-testing-client.jks", "password")
+    ))
     val response = http(GET("https://someurl"))
     ...
     //Basic auth
@@ -66,6 +74,8 @@ For more examples see
 
 * [HttpSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpSpec.scala)
 * [HttpsSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpsSpec.scala)
+* [SslAuthSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/SslAuthSpec.scala)
+* [MutualSslAuthSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/MutualSslAuthSpec.scala)
 
 Server Usage
 ------------

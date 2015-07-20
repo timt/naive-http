@@ -40,10 +40,30 @@ Stopping the server
 
     httpServer.stop()
 
+Start an SSL server
+
+    import io.shaka.http.HttpServer
+    import io.shaka.http.PathAndPassword
+    import io.shaka.http.Response.respond
+    val server = HttpServer.https(
+        keyStoreConfig = PathAndPassword("src/test/resources/certs/keystore-testing.jks", "password")
+    ).handler(_ => respond("Hello world")).start()
+
+Start an SSL with mutual SSL auth
+
+    import io.shaka.http.HttpServer
+    import io.shaka.http.PathAndPassword
+    import io.shaka.http.Response.respond
+    val server = HttpServer.httpsMutualAuth(
+        keyStoreConfig = PathAndPassword("src/test/resources/certs/keystore-testing.jks", "password"),
+        trustStoreConfig = PathAndPassword("src/test/resources/certs/server-truststore.jks", "password")
+    ).handler(_ => respond("Hello world")).start()
+
 
 For more examples see
 
 * [HttpServerSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpServerSpec.scala)
 * [ServingStaticResourcesSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/ServingStaticResourcesSpec.scala)
-* [HttpsSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/HttpsSpec.scala)
+* [SslAuthSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/SslAuthSpec.scala)
+* [MutualSslAuthSpec.scala](https://github.com/timt/naive-http/blob/master/src/test/scala/io/shaka/http/MutualSslAuthSpec.scala)
 

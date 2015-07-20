@@ -5,12 +5,12 @@ import javax.net.ssl.HttpsURLConnection
 
 import io.shaka.http.Headers.toHeaders
 import io.shaka.http.Http._
-import io.shaka.http.Https.{sslFactory, hostNameVerifier, KeyStore}
+import io.shaka.http.Https.{HttpsConfig, sslFactory, hostNameVerifier}
 import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Status._
 import io.shaka.http.proxy.{Proxy, noProxy}
 
-class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = None, timeout: Timeout = tenSecondTimeout) extends HttpHandler {
+class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig] = None, timeout: Timeout = tenSecondTimeout) extends HttpHandler {
 
   override def apply(request: Request): Response = {
     val connection = createConnection(request.url, proxy)
@@ -47,10 +47,10 @@ class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = Non
 
   protected def createConnection(url: Url, proxy: Proxy) = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
-    (connection, keyStore) match {
-      case (c: HttpsURLConnection, Some(ks)) =>
-        c.setSSLSocketFactory(sslFactory(ks))
-        c.setHostnameVerifier(hostNameVerifier(ks))
+    (connection, httpsConfig) match {
+      case (c: HttpsURLConnection, Some(config)) =>
+        c.setSSLSocketFactory(sslFactory(config))
+        c.setHostnameVerifier(hostNameVerifier(config.trustStoreConfig))
       case _ =>
     }
     connection.setUseCaches(false)
@@ -59,8 +59,6 @@ class ClientHttpHandler(proxy: Proxy = noProxy, keyStore: Option[KeyStore] = Non
     connection.setInstanceFollowRedirects(false)
     connection
   }
-
-
 }
 
 trait SslConnection {

@@ -1,13 +1,12 @@
 package io.shaka.http
 
-import java.net.SocketException
-import javax.net.ssl.SSLHandshakeException
+import java.io.IOException
 
 import io.shaka.http.Https.{DoNotUseKeyStore, HttpsConfig, TrustServersByTrustStore, UseKeyStore}
 import io.shaka.http.Request.GET
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.OK
-import io.shaka.http.TestCerts.{keyStoreWithClientCert, keyStoreWithClientCertUnrecognisedByServer, keyStoreWithServerCert, trustStoreWithClientCert, trustStoreWithServerCert}
+import io.shaka.http.TestCerts.{keyStoreWithClientCert, keyStoreWithServerCert, trustStoreWithClientCert, trustStoreWithServerCert}
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 
@@ -24,7 +23,7 @@ class MutualSslAuthSpec extends FunSuite with BeforeAndAfterAll {
   }
 
   test("Client cannot connect to server doing mutual SSL auth without specifying client certificate"){
-    intercept[SSLHandshakeException]{
+    intercept[IOException]{
       Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
         TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
         DoNotUseKeyStore
@@ -33,7 +32,7 @@ class MutualSslAuthSpec extends FunSuite with BeforeAndAfterAll {
   }
 
   test("Client cannot connect to server that doesn't trust client certificate"){
-    intercept[SSLHandshakeException]{
+    intercept[IOException]{
       Http.http(GET(s"https://127.0.0.1:${server.port}/foo"))(httpsConfig = Some(HttpsConfig(
         TrustServersByTrustStore(trustStoreWithServerCert.path, trustStoreWithServerCert.password),
         DoNotUseKeyStore

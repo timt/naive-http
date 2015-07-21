@@ -5,7 +5,7 @@ import javax.xml.bind.DatatypeConverter.printBase64Binary
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 import io.shaka.http.FormParameters.{fromEntity, toEntity}
 import io.shaka.http.Http._
-import io.shaka.http.HttpHeader.{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
+import io.shaka.http.HttpHeader.{COOKIE, ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 
 
 object Request {
@@ -61,6 +61,10 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
   def basicAuth(user: String, password: String): Request = {
     header(AUTHORIZATION, "Basic " + printBase64Binary(s"$user:$password".getBytes))
   }
+  def cookies: Set[Cookie] = headers.filter(_._1 == COOKIE).flatMap(_._2.split(";"))
+    .map(_.trim.split("="))
+    .map(cookie => Cookie(cookie.head, cookie.last))
+    .toSet
 }
 
 

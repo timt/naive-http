@@ -29,6 +29,7 @@ object HttpHeader {
   case object WWW_AUTHENTICATE extends HttpHeader {val name = "WWW-Authenticate"}
   case object COOKIE extends HttpHeader {val name = "Cookie"}
   case object SET_COOKIE extends HttpHeader {val name = "Set-Cookie"}
+  case object X_VIA extends HttpHeader {val name = "X-Via"}
   case object X_FORWARDED_FOR extends HttpHeader {val name = "X-Forwarded-For"}
   case object X_FORWARDED_PROTO extends HttpHeader {val name = "X-Forwarded-Proto"}
   case object X_CORRELATION_ID extends HttpHeader {val name = "X-CorrelationID"}

@@ -25,6 +25,10 @@ class FormParameterSpec extends FunSuite {
     assert(deserialize("name") === FormParameter("name"))
   }
 
+  test("can deserialize a FormParameter with an empty value") {
+    assert(deserialize("name=") === FormParameter("name", Some("")))
+  }
+
   test("deserialize url decodes name and value") {
     assert(deserialize("a+question=what+is+%2420%2F5") === FormParameter("a question", "what is $20/5"))
   }

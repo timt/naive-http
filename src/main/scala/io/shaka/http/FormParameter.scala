@@ -18,8 +18,8 @@ object FormParameter {
   private def encode(s: String) = URLEncoder.encode(s, Charset.forName("UTF-8").toString)
 
   def deserialize(serializedFormParameter: String): FormParameter = if (serializedFormParameter.contains("=")) {
-    val pair = serializedFormParameter.split("=")
-    FormParameter(decode(pair(0)), Some(decode(pair(1))))
+    val values = serializedFormParameter.split("=")
+    FormParameter(decode(values(0)), Some(if (values.length < 2) "" else decode(values(1))))
   } else {
     FormParameter(decode(serializedFormParameter))
   }

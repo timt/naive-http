@@ -60,7 +60,12 @@ object ContentType {
 
   def contentType(value: String) = values.find(h => h.value equalsIgnoreCase value).getOrElse(unknownContentType(value))
 
-  def unapply(request: Request) = if (request.headers.contains(CONTENT_TYPE)) request.headers(CONTENT_TYPE).headOption.map(contentType) else None
+  def unapply(request: Request): Option[ContentType] = if (request.headers.contains(CONTENT_TYPE)) request.headers(CONTENT_TYPE).headOption.map(contentType) else None
 
 }
-trait ContentType {def value: String}
+
+trait ContentType {
+  def value: String
+  def unapply(request: Request): Boolean = request.headers(HttpHeader.ACCEPT).exists(accept =>
+    accept.contains(value) || accept.contains(ContentType.WILDCARD.value))
+}

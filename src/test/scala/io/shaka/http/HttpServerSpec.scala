@@ -2,7 +2,7 @@ package io.shaka.http
 
 import io.shaka.http.ContentType._
 import io.shaka.http.Http.http
-import io.shaka.http.HttpHeader.{CONTENT_LENGTH, USER_AGENT}
+import io.shaka.http.HttpHeader.{ACCEPT, CONTENT_LENGTH, USER_AGENT}
 import io.shaka.http.HttpServer.ToLog
 import io.shaka.http.HttpServerSpecSupport.withHttpServer
 import io.shaka.http.Request.{GET, HEAD, POST}
@@ -117,6 +117,25 @@ class HttpServerSpec extends FunSuite {
 
     httpServer.stop()
   }
+
+  test("content type works") {
+    withHttpServer { (httpServer, rootUrl) =>
+      httpServer.handler {
+        case APPLICATION_JSON() =>
+          respond("""{"hello":"json"}""")
+        case _ =>
+          respond("Hello everything else")
+      }
+      val jsonResponse = http(GET(s"$rootUrl/anything").accept(APPLICATION_JSON))
+      assert(jsonResponse.entityAsString === """{"hello":"json"}""")
+      val wildcardResponse = http(GET(s"$rootUrl/anything").accept(WILDCARD))
+      assert(wildcardResponse.entityAsString === """{"hello":"json"}""")
+      val jsonOrAnythingResponse = http(GET(s"$rootUrl/anything").header(ACCEPT, s"${APPLICATION_JSON.value},${WILDCARD.value}"))
+      assert(jsonOrAnythingResponse.entityAsString === """{"hello":"json"}""")
+      val otherResponse = http(GET(s"$rootUrl/anything").accept(TEXT_HTML))
+      assert(otherResponse.entityAsString === "Hello everything else")
+    }
+  }
 }
 
 
@@ -132,4 +151,4 @@ class HttpServerSpec extends FunSuite {
 
 
 
-    
+

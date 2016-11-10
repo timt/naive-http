@@ -4,15 +4,15 @@ import java.io.FileInputStream
 
 import io.shaka.http.ContentType.APPLICATION_ATOM_XML
 import io.shaka.http.FormParameters.FormParameters
-import io.shaka.http.Http.{Timeout, http}
+import io.shaka.http.Http.http
 import io.shaka.http.HttpHeader.{CONTENT_TYPE, ETAG, USER_AGENT}
 import io.shaka.http.IO._
 import io.shaka.http.Request.{GET, POST}
+import io.shaka.http.Response.ok
 import io.shaka.http.Status.{FORBIDDEN, OK}
 import io.shaka.http.TestHttpServer.withServer
 import org.scalatest.Matchers._
 import org.scalatest._
-import unfiltered.response.{ResponseBytes, Forbidden, Ok}
 
 class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 
@@ -46,7 +46,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
       server.addResponseHeader(ETAG, "sheep")
       server.addResponseHeader(ETAG, "cheese")
       val response = http(GET(server.toUrl("returnManyHeaders")))
-      assert(response.headers(ETAG) === List("sheep", "cheese"))
+      assert(response.headers(ETAG) === List("cheese", "sheep"))
     }
   }
 
@@ -78,7 +78,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
     val bytes = inputStreamToByteArray(is)
     is.close()
     withServer { server =>
-      server.get("somepdf").responds(Ok ~> ResponseBytes(bytes))
+      server.get("somepdf").responds(ok.entity(bytes))
       val response = http(GET(server.toUrl("somepdf")))
       assert(response.status === OK)
       assert(response.entity.get.content === bytes)
@@ -87,7 +87,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 
   test("can handle Forbidden (connection input stream is null)") {
     withServer { server =>
-      server.get("forbidden").responds(Forbidden)
+      server.get("forbidden").responds(Response().status(FORBIDDEN))
       val response = http(GET(server.toUrl("forbidden")))
       assert(response.status === FORBIDDEN)
       response.entity shouldBe empty
@@ -96,7 +96,7 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 
   test("empty response entity represented as None") {
     withServer { server =>
-      server.get("empty").responds(Ok)
+      server.get("empty").responds(ok)
       assert(http(GET(server.toUrl("empty"))).entity === None)
     }
   }

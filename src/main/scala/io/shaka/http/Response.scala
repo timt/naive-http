@@ -18,8 +18,9 @@ case class Response(status: Status = OK, headers: Headers = Headers.Empty, entit
   def contentType(value: String) = header(CONTENT_TYPE, value)
   def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
   def contentType = header(CONTENT_TYPE).map(ContentType.contentType)
-  def entity(content: String): Response = copy(entity = Some(Entity(content)))
-  def entity(content: Array[Byte]): Response = copy(entity = Some(Entity(content)))
+  def entity(content: String): Response = entity(Entity(content))
+  def entity(content: Array[Byte]): Response = entity(Entity(content))
+  def entity(entity: Entity): Response = copy(entity = Some(entity))
   def entityAsString: String = entity match {
     case Some(value) => value.toString
     case _ => throw new RuntimeException("There is no entity in this response! Consider using response.entity:Option[Entity] instead.")

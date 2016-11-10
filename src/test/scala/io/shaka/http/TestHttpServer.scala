@@ -1,10 +1,11 @@
 package io.shaka.http
 
+import io.shaka.http.Http.{Header, HttpHandler}
+import io.shaka.http.Request.{GET, POST}
+import io.shaka.http.RequestMatching.URLMatcher
+import io.shaka.http.Response.{ok, respond}
+import io.shaka.http.Status.NOT_FOUND
 import io.shaka.http.TestCerts.keyStoreWithServerCert
-import unfiltered.filter.Planify
-import unfiltered.request.{Path, Seg}
-import unfiltered.response._
-
 
 object TestHttpServer {
   def withServer(block: TestHttpServer => Unit) = {
@@ -15,7 +16,7 @@ object TestHttpServer {
   def withHttpsServer(block: TestHttpServer => Unit) = {
     System.setProperty("jetty.ssl.keyStore", keyStoreWithServerCert.path)
     System.setProperty("jetty.ssl.keyStorePassword", keyStoreWithServerCert.password)
-    val server = new TestHttpServer(unfiltered.jetty.Https.anylocal).start()
+    val server = new TestHttpServer().start()
     block(server)
     server.stop()
     System.clearProperty("jetty.ssl.keyStore")
@@ -24,19 +25,17 @@ object TestHttpServer {
   def apply() = new TestHttpServer().start()
 }
 
-class TestHttpServer(private val server:unfiltered.jetty.Server = unfiltered.jetty.Http.anylocal) {
+class TestHttpServer(private val server: HttpServer = HttpServer()) {
   type ServerAssert = (RequestAssertions) => (Unit)
   private var serverAsserts = List[ServerAssert]()
-  private var responseHeadersToAdd: List[ResponseHeader] = Nil
+  private var responseHeadersToAdd: List[Header] = Nil
 
-  private var getResponse: (String) => ResponseFunction[Any] = (path) => {
-    val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]) { case (status, header) => status ~> header}
-    statusAndHeaders ~> ResponseString(path)
-  }
+  private var getResponse: (String) => Response = (path) =>
+    responseHeadersToAdd.foldLeft(ok.entity(path)) { case (response, header) => response.header(header._1, header._2)}
 
   def get(url: String) = new {
-    def responds(response: ResponseFunction[Any]) {
-      getResponse = (path) => if (path == url) response else NotFound ~> ResponseString("You're having a laugh")
+    def responds(response: Response) {
+      getResponse = (path) => if (path == url) response else respond("You're having a laugh").status(NOT_FOUND)
     }
   }
 
@@ -47,28 +46,25 @@ class TestHttpServer(private val server:unfiltered.jetty.Server = unfiltered.jet
   }
 
   def addResponseHeader(header: HttpHeader, value: String) {
-    responseHeadersToAdd = ResponseHeader(header.name, List(value)) :: responseHeadersToAdd
+    responseHeadersToAdd = (header, value) :: responseHeadersToAdd
   }
 
-  private val getAll = Planify {
-    case req@unfiltered.request.GET(Path(Seg(p :: Nil))) =>
-      serverAsserts.foreach(_(RequestAssertions(req)))
-      getResponse(p)
-  }
-
-  private val postEcho = Planify {
-    case req@unfiltered.request.POST(Path(Seg("echoPost" :: Nil))) =>
-      val request = RequestAssertions(req)
-      serverAsserts.foreach(_(request))
-      val statusAndHeaders = responseHeadersToAdd.foldLeft(Ok: ResponseFunction[Any]) { case (status, header) => status ~> header}
-      statusAndHeaders ~> ResponseString(request.body)
-
+  private val echo: HttpHandler = (req) => {
+    val request = RequestAssertions(req)
+    serverAsserts.foreach(_ (request))
+    val statusAndHeaders = responseHeadersToAdd.foldLeft(ok) { case (response, header) => response.header(header._1, header._2) }
+    request.body.fold(statusAndHeaders)(statusAndHeaders.entity(_))
   }
 
   private def start() = {
     server
-      .filter(getAll)
-      .filter(postEcho)
+      .handler{
+        case req@GET(url"/$p") =>
+          serverAsserts.foreach(_(RequestAssertions(req)))
+          getResponse(p)
+        case req@POST(url"/echoPost") =>
+          echo(req)
+      }
       .start()
     this
   }
@@ -77,7 +73,7 @@ class TestHttpServer(private val server:unfiltered.jetty.Server = unfiltered.jet
     server.stop()
   }
 
-  private def url = server.url
+  private def url = s"http://localhost:${server.port}/"
 
 
 }

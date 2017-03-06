@@ -5,7 +5,7 @@ A really simple http library implemented in scala with no dependencies
 Requirements
 ------------
 
-* [scala](http://www.scala-lang.org) 2.12.0
+* [scala](http://www.scala-lang.org) 2.12.1
 * [scala](http://www.scala-lang.org) 2.11.2
 
 Client Usage
@@ -14,7 +14,7 @@ Add the following lines to your build.sbt
 
     resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "90"
+    libraryDependencies += "io.shaka" %% "naive-http" % "91"
 
 Start hacking
 

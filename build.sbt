@@ -9,9 +9,9 @@ organization := "io.shaka"
 
 version := Try(sys.env("LIB_VERSION")).getOrElse("1")
 
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.1"
 
-crossScalaVersions := Seq("2.11.2", "2.12.0")
+crossScalaVersions := Seq("2.11.2", "2.12.1")
 
 libraryDependencies ++= Seq(
   "org.eclipse.jetty.orbit" % "javax.servlet" % "2.5.0.v201103041518" % "test",

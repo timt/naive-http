@@ -1,7 +1,8 @@
 package io.shaka.http
 
 import java.io.FileInputStream
-import java.security.{KeyStore ⇒ JKeyStore}
+import java.nio.file.{Files, Paths}
+import java.security.{KeyStore => JKeyStore}
 import java.security.cert.X509Certificate
 import javax.net.ssl._
 
@@ -43,7 +44,8 @@ object Https {
 
   private def keyManagers(keyStoreConfig: KeyStoreConfig): Array[KeyManager] = keyStoreConfig match {
     case UseKeyStore(path, password) ⇒
-      val inputStream = new FileInputStream(path)
+      val inputStream = if (Files.exists(Paths.get(path))) new FileInputStream(path)
+      else getClass.getResourceAsStream(path)
       val keyStore: JKeyStore = JKeyStore.getInstance(JKeyStore.getDefaultType)
       keyStore.load(inputStream, password.toCharArray)
 

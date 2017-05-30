@@ -50,11 +50,11 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
     )
   }
   def header(header: HttpHeader, value: String): Request = copy(headers = (header, value) :: headers)
-  def contentType(value: String) = header(CONTENT_TYPE, value)
-  def contentType(value: ContentType) = header(CONTENT_TYPE, value.value)
-  def accept(value: ContentType) = header(ACCEPT, value.value)
-  def entity(content: String) = copy(entity = Some(Entity(content)))
-  def entity(content: Array[Byte]) = copy(entity = Some(Entity(content)))
+  def contentType(value: String): Request = header(CONTENT_TYPE, value)
+  def contentType(value: ContentType): Request = header(CONTENT_TYPE, value.value)
+  def accept(value: ContentType): Request = header(ACCEPT, value.value)
+  def entity(content: String): Request = copy(entity = Some(Entity(content)))
+  def entity(content: Array[Byte]): Request = copy(entity = Some(Entity(content)))
   def entityAsString: String = entity match {
     case Some(value) => value.toString
     case _ => throw new RuntimeException("There is no entity in this request! Consider using request.entity:Option[Entity] instead.")

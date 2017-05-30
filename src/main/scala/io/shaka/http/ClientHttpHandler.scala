@@ -19,7 +19,7 @@ class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig]
       header =>
         connection.setRequestProperty(header._1.name, header._2)
     }
-    request.entity.map {
+    request.entity.foreach {
       entity =>
         connection.setDoOutput(true)
         connection.getOutputStream.write(entity.content)
@@ -29,7 +29,7 @@ class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig]
     response
   }
 
-  def buildResponse(connection: HttpURLConnection) = {
+  def buildResponse(connection: HttpURLConnection): Response = {
     val s = status(connection.getResponseCode, connection.getResponseMessage)
     val headers: Headers = toHeaders(connection.getHeaderFields)
     val entity: Option[Entity] = for {
@@ -45,7 +45,7 @@ class ClientHttpHandler(proxy: Proxy = noProxy, httpsConfig: Option[HttpsConfig]
     )
   }
 
-  protected def createConnection(url: Url, proxy: Proxy) = {
+  protected def createConnection(url: Url, proxy: Proxy): HttpURLConnection = {
     val connection = new URL(url).openConnection(proxy()).asInstanceOf[HttpURLConnection]
     (connection, httpsConfig) match {
       case (c: HttpsURLConnection, Some(config)) =>

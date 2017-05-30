@@ -1,18 +1,21 @@
 package io.shaka.http
 
+import java.io.FileInputStream
+
 import io.shaka.http.ContentType._
 import io.shaka.http.Http.http
 import io.shaka.http.HttpHeader.{ACCEPT, CONTENT_LENGTH, USER_AGENT}
 import io.shaka.http.HttpServer.ToLog
 import io.shaka.http.HttpServerSpecSupport.withHttpServer
+import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Request.{GET, HEAD, POST}
 import io.shaka.http.Response.respond
-import io.shaka.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
-import org.scalatest.FunSuite
+import io.shaka.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
+import org.scalatest.{FunSuite, Matchers}
 
 import scala.collection.mutable
 
-class HttpServerSpec extends FunSuite {
+class HttpServerSpec extends FunSuite with Matchers{
 
   test("httpServer works") {
     withHttpServer { (httpServer, rootUrl) =>
@@ -37,6 +40,20 @@ class HttpServerSpec extends FunSuite {
     withHttpServer { (httpServer, rootUrl) =>
       httpServer.handler { case POST(_) => respond("Hello world")}
       http(POST(rootUrl))
+    }
+  }
+
+  test("httpServer receives POST binary method") {
+    val somePdfFile = "./src/test/scala/io/shaka/http/pdf-sample.pdf"
+    val is = new FileInputStream(somePdfFile)
+    val bytes: Array[Byte] = inputStreamToByteArray(is)
+
+    withHttpServer { (httpServer, rootUrl) =>
+      httpServer.handler { case req@POST(_) =>
+        req.entity shouldBe Some(Entity(bytes))
+        respond("Hello world")}
+      val response = http(POST(rootUrl).entity(bytes))
+      response.status shouldBe OK
     }
   }
 

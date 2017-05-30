@@ -15,7 +15,7 @@ crossScalaVersions := Seq("2.11.2", "2.12.1")
 
 libraryDependencies ++= Seq(
   "org.eclipse.jetty.orbit" % "javax.servlet" % "2.5.0.v201103041518" % "test",
-  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 )
 
 pgpPassphrase := Some(Try(sys.env("SECRET")).getOrElse("goaway").toCharArray)

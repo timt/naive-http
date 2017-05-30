@@ -1,5 +1,7 @@
 package io.shaka.http
 
+import java.io.InputStream
+
 import com.sun.net.httpserver.{HttpExchange => SunHttpExchange, HttpHandler => SunHttpHandler}
 import io.shaka.http.Handlers.{HEADRequestHandler, SafeRequestHandler}
 import io.shaka.http.Headers._
@@ -19,8 +21,12 @@ class SunHttpHandlerAdapter(handler: HttpHandler) extends SunHttpHandler {
     method(exchange.getRequestMethod),
     exchange.getRequestURI.toString,
     toHeaders(exchange.getRequestHeaders),
-    Some(Entity(Source.fromInputStream(exchange.getRequestBody).map(_.toByte).toArray))
+    Some(Entity(toBytes(exchange.getRequestBody)))
   )
+
+  def toBytes(inputStream: InputStream):Array[Byte] = {
+    Stream.continually(inputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
+  }
 
   private def respond(exchange: SunHttpExchange, response: Response) {
     response.headers.foreach {

@@ -96,7 +96,7 @@ object Status {
     HTTP_VERSION_NOT_SUPPORTED
   )
 
-  def status(code: Int, description: String) = values.find(s => s.code == code && s.description == description).getOrElse(unknownStatus(code,description))
+  def status(code: Int, description: String) = values.find(s => s.code == code).getOrElse(unknownStatus(code,description))
 }
 
 sealed trait Status {

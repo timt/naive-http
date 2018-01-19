@@ -42,6 +42,7 @@ object Request {
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {
+
   def formParameters(parameters: FormParameter*): Request = {
     val existingFormParameters = entity.fold(List[FormParameter]())(fromEntity)
     copy(
@@ -62,6 +63,8 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
   def basicAuth(user: String, password: String): Request = {
     header(AUTHORIZATION, "Basic " + printBase64Binary(s"$user:$password".getBytes))
   }
+  def cookie(cookie: Cookie): Request = header(COOKIE, cookie.toSetCookie)
+
   def cookies: Set[Cookie] = headers.filter(_._1 == COOKIE).flatMap(_._2.split(";"))
     .map(_.trim.split("="))
     .map(cookie => Cookie(cookie.head, cookie.last))

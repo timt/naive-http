@@ -9,6 +9,7 @@ object HttpHeader {
   case object AUTHORIZATION extends HttpHeader {val name = "Authorization"}
   case object CACHE_CONTROL extends HttpHeader {val name = "Cache-Control"}
   case object CONTENT_ENCODING extends HttpHeader {val name = "Content-Encoding"}
+  case object CONTENT_DISPOSITION extends HttpHeader {val name = "Content-Disposition"}
   case object CONTENT_LANGUAGE extends HttpHeader {val name = "Content-Language"}
   case object CONTENT_LENGTH extends HttpHeader {val name = "Content-Length"}
   case object CONTENT_LOCATION extends HttpHeader {val name = "Content-Location"}

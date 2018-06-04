@@ -54,7 +54,8 @@ object StaticResponse {
     "png" -> IMAGE_PNG,
     "js" -> APPLICATION_JAVASCRIPT,
     "pdf" -> APPLICATION_PDF,
-    "exe" -> APPLICATION_OCTET_STREAM
+    "exe" -> APPLICATION_OCTET_STREAM,
+    "json" -> APPLICATION_JSON
   )
 
   private def toContentType(path: String) = fileExtensionToContentType.find { case (key, _) => path.endsWith("." + key)}.map(_._2).getOrElse(APPLICATION_OCTET_STREAM)

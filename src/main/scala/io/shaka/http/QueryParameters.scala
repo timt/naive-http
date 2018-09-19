@@ -16,7 +16,7 @@ object QueryParameters {
     val mutableResult: M.Map[String, M.ListBuffer[String]] =
       M.Map.empty[String, M.ListBuffer[String]].withDefault(_ => M.ListBuffer[String]())
 
-    decode(queryParams, "UTF-8").split("&").foreach {
+    queryParams.split("&").map(decode(_, "UTF-8")).foreach {
       case url"$key=$value" => mutableResult += ((key, mutableResult(key) += value))
       case _                =>
     }

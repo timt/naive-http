@@ -16,4 +16,7 @@ class QueryParametersSpec extends FunSuite {
       case GET(url"some/url?${QueryParameters(params)}") ⇒ params
     }) === Map("key" -> List("oldvalue", "value"), "key2" -> List("value2")))
   }
+  test("encoded with & in value") {
+    assert(QueryParameters.unapply("key=value1%20%26%20value2") === Some(Map("key" -> List("value1 & value2"))))
+  }
 }

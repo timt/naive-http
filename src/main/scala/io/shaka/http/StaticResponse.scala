@@ -13,7 +13,7 @@ import scala.util.Try
 object StaticResponse {
   type ClasspathDocRoot = Unit => String
 
-  private def fileNotFound(path: String) = respond(s"file $path not found").status(NOT_FOUND)
+  private def fileNotFound(path: String) = respond(s"file not found").status(NOT_FOUND)
 
   def static(docRoot: String, path: String): Response = new File(s"$docRoot$path") match {
     case dir if dir.isDirectory => respond(dir.listFiles().map(_.getName).mkString("\n")).contentType(TEXT_PLAIN)

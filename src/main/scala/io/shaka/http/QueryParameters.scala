@@ -12,7 +12,7 @@ import scala.collection.{mutable ⇒ M, breakOut} // http://stackoverflow.com/qu
   * This is dealt with by a slightly more complex return type: Map[String, List[String]] than the lossy variant.
   */
 object QueryParameters {
-  def unapply(queryParams: String): Option[Map[String, List[String]]] = {
+  def unapply(queryParams: String): Option[QueryParameters] = {
     val mutableResult: M.Map[String, M.ListBuffer[String]] =
       M.Map.empty[String, M.ListBuffer[String]].withDefault(_ => M.ListBuffer[String]())
 
@@ -25,6 +25,8 @@ object QueryParameters {
       case (key, valuesBuffer) ⇒ (key, valuesBuffer.toList)
     }(breakOut)
 
-    Some(queryParamsMultiMap)
+    Some(QueryParameters(queryParamsMultiMap))
   }
 }
+
+case class QueryParameters(values: Map[String, List[String]]){}

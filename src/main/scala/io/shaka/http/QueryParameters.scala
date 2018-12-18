@@ -29,4 +29,6 @@ object QueryParameters {
   }
 }
 
-case class QueryParameters(values: Map[String, List[String]]){}
+case class QueryParameters(values: Map[String, List[String]]){
+  def get(key: String): Option[String] = values.get(key).flatMap(_.headOption)
+}

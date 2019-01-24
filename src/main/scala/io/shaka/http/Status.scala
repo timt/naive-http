@@ -43,6 +43,7 @@ object Status {
   case object UNSUPPORTED_MEDIA_TYPE          extends Status {val code = 415; val description =  "Unsupported Media Type"}
   case object REQUESTED_RANGE_NOT_SATISFIABLE extends Status {val code = 416; val description =  "Requested Range Not Satisfiable"}
   case object EXPECTATION_FAILED              extends Status {val code = 417; val description =  "Expectation Failed"}
+  case object UNPROCESSABLE_ENTITY            extends Status {val code = 422; val description =  "Unprocessable Entity"}
 
   //SERVER_ERROR = set(500, 599}
   case object INTERNAL_SERVER_ERROR      extends Status { val code = 500; val description = "Internal Server Error"}

@@ -1,16 +1,15 @@
 package io.shaka.http
 
 import java.io.InputStream
-import scala.collection.mutable.ListBuffer
+
+import scala.collection.mutable.ArrayBuffer
 
 object IO {
   def inputStreamToByteArray(is: InputStream): Array[Byte] = {
-    val buf = ListBuffer[Byte]()
-    var b = is.read()
-    while (b != -1) {
-      buf.append(b.byteValue)
-      b = is.read()
-    }
-    buf.toArray
+    val buffer = new Array[Byte](1024 * 8)
+    val output = new ArrayBuffer[Byte]()
+    Stream.continually(is.read(buffer)).takeWhile(_ != -1).foreach(output ++= buffer.slice(0, _))
+    output.toArray
   }
+
 }

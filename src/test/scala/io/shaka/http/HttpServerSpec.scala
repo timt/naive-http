@@ -125,7 +125,7 @@ class HttpServerSpec extends FunSuite with Matchers{
   }
 
   test("output the port the server has started on") {
-    val loggedMessages = mutable.MutableList[String]()
+    val loggedMessages = mutable.ListBuffer[String]()
     val captureMessage: ToLog = (s) ⇒ loggedMessages += s
 
     val httpServer = new HttpServer(0, captureMessage).start()

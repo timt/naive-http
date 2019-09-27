@@ -1,4 +1,3 @@
-import scala.Some
 import scala.util.Try
 import bintray.Keys._
 
@@ -9,13 +8,14 @@ organization := "io.shaka"
 
 version := Try(sys.env("LIB_VERSION")).getOrElse("1")
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.13.1"
 
-crossScalaVersions := Seq("2.11.2", "2.12.1")
+crossScalaVersions := Seq("2.12.10", "2.13.1")
 
 libraryDependencies ++= Seq(
+  "javax.xml.bind" % "jaxb-api" % "2.3.1",
   "org.eclipse.jetty.orbit" % "javax.servlet" % "2.5.0.v201103041518" % "test",
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )
 
 pgpPassphrase := Some(Try(sys.env("SECRET")).getOrElse("goaway").toCharArray)

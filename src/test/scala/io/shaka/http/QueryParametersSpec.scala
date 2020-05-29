@@ -19,4 +19,8 @@ class QueryParametersSpec extends FunSuite {
   test("encoded with & in value") {
     assert(QueryParameters.unapply("key=value1%20%26%20value2") === Some(QueryParameters(Map("key" -> List("value1 & value2")))))
   }
+  test("handle query params with no value") {
+    assert(QueryParameters.unapply("key=") === Some(QueryParameters(Map("key" -> List.empty))))
+    assert(QueryParameters.unapply("key") === Some(QueryParameters(Map("key" -> List.empty))))
+  }
 }

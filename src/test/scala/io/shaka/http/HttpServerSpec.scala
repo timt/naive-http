@@ -11,11 +11,10 @@ import io.shaka.http.IO.inputStreamToByteArray
 import io.shaka.http.Request.{GET, HEAD, POST}
 import io.shaka.http.Response.respond
 import io.shaka.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-import scala.collection.mutable
-
-class HttpServerSpec extends FunSuite with Matchers{
+class HttpServerSpec extends AnyFunSuite with Matchers{
 
   test("httpServer works") {
     withHttpServer { (httpServer, rootUrl) =>
@@ -125,8 +124,10 @@ class HttpServerSpec extends FunSuite with Matchers{
   }
 
   test("output the port the server has started on") {
-    val loggedMessages = mutable.MutableList[String]()
-    val captureMessage: ToLog = (s) ⇒ loggedMessages += s
+    var loggedMessages: List[String] = List.empty
+    val captureMessage: ToLog = (s) ⇒ {
+      loggedMessages = s :: loggedMessages
+    }
 
     val httpServer = new HttpServer(0, captureMessage).start()
 

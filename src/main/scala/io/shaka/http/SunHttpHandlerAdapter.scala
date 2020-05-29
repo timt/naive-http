@@ -7,8 +7,7 @@ import io.shaka.http.Handlers.{HEADRequestHandler, SafeRequestHandler}
 import io.shaka.http.Headers._
 import io.shaka.http.Http.HttpHandler
 import io.shaka.http.Method._
-
-import scala.io.Source
+import scala.language.postfixOps
 
 
 class SunHttpHandlerAdapter(handler: HttpHandler) extends SunHttpHandler {

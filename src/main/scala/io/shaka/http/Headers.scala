@@ -23,7 +23,6 @@ case class Headers(headers: List[Header]) {
 
 object Headers {
   val Empty = Headers(List())
-  import scala.collection.JavaConversions.mapAsScalaMap
-  import scala.collection.JavaConversions.collectionAsScalaIterable
-  def toHeaders(rawHeaders: java.util.Map[String, java.util.List[String]]):Headers = Headers(rawHeaders.toList.flatMap(pair => pair._2.map((httpHeader(pair._1), _))))
+  import scala.collection.JavaConverters._
+  def toHeaders(rawHeaders: java.util.Map[String, java.util.List[String]]):Headers = Headers(rawHeaders.asScala.toList.flatMap(pair => pair._2.asScala.map((httpHeader(pair._1), _))))
 }

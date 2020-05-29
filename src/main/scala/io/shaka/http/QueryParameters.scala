@@ -2,7 +2,7 @@ package io.shaka.http
 
 import io.shaka.http.RequestMatching.URLMatcher
 import java.net.URLDecoder.decode
-import scala.collection.{mutable ⇒ M, breakOut} // http://stackoverflow.com/questions/1715681/scala-2-8-breakout/1716558#1716558
+import scala.collection.{mutable ⇒ M}
 
 object QueryParameters {
   def unapply(queryParams: String): Option[QueryParameters] = {
@@ -19,7 +19,7 @@ object QueryParameters {
 
     val queryParamsMultiMap: Map[String, List[String]] = mutableResult.map {
       case (key, valuesBuffer) ⇒ (key, valuesBuffer.toList)
-    }(breakOut)
+    }.toMap
 
     Some(QueryParameters(queryParamsMultiMap))
   }

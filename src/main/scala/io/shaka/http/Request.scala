@@ -39,6 +39,12 @@ object Request {
 
     def unapply(req: Request): Option[String] = if (req.method == Method.DELETE) Some(req.url) else None
   }
+
+  object OPTIONS {
+    def apply(url: Url) = Request(Method.OPTIONS, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.OPTIONS) Some(req.url) else None
+  }
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

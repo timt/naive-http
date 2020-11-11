@@ -6,8 +6,12 @@ object HttpHeader {
   case object ACCEPT_CHARSET extends HttpHeader {val name = "Accept-Charset"}
   case object ACCEPT_ENCODING extends HttpHeader {val name = "Accept-Encoding"}
   case object ACCEPT_LANGUAGE extends HttpHeader {val name = "Accept-Language"}
+  case object ACCESS_CONTROL_ALLOW_HEADERS extends HttpHeader { val name = "Access-Control-Allow-Headers" }
+  case object ACCESS_CONTROL_ALLOW_METHODS extends HttpHeader { val name = "Access-Control-Allow-Methods" }
+  case object ACCESS_CONTROL_ALLOW_ORIGIN extends HttpHeader {val name = "Access-Control-Allow-Origin"}
   case object AUTHORIZATION extends HttpHeader {val name = "Authorization"}
   case object CACHE_CONTROL extends HttpHeader {val name = "Cache-Control"}
+  case object COOKIE extends HttpHeader {val name = "Cookie"}
   case object CONTENT_ENCODING extends HttpHeader {val name = "Content-Encoding"}
   case object CONTENT_DISPOSITION extends HttpHeader {val name = "Content-Disposition"}
   case object CONTENT_LANGUAGE extends HttpHeader {val name = "Content-Language"}
@@ -25,18 +29,19 @@ object HttpHeader {
   case object IF_UNMODIFIED_SINCE extends HttpHeader {val name = "If-Unmodified-Since"}
   case object LAST_MODIFIED extends HttpHeader {val name = "Last-Modified"}
   case object LOCATION extends HttpHeader {val name = "Location"}
+  case object ORIGIN extends HttpHeader {val name = "Origin"}
+  case object SERVER extends HttpHeader {val name = "Server"}
+  case object SET_COOKIE extends HttpHeader {val name = "Set-Cookie"}
+  case object TRANSFER_ENCODING extends HttpHeader {val name = "Transfer-Encoding"}
   case object USER_AGENT extends HttpHeader {val name = "User-Agent"}
   case object VARY extends HttpHeader {val name = "Vary"}
   case object WWW_AUTHENTICATE extends HttpHeader {val name = "WWW-Authenticate"}
-  case object COOKIE extends HttpHeader {val name = "Cookie"}
-  case object SET_COOKIE extends HttpHeader {val name = "Set-Cookie"}
   case object X_VIA extends HttpHeader {val name = "X-Via"}
   case object X_FORWARDED_FOR extends HttpHeader {val name = "X-Forwarded-For"}
   case object X_FORWARDED_PROTO extends HttpHeader {val name = "X-Forwarded-Proto"}
   case object X_CORRELATION_ID extends HttpHeader {val name = "X-CorrelationID"}
-  case object TRANSFER_ENCODING extends HttpHeader {val name = "Transfer-Encoding"}
-  case object ACCESS_CONTROL_ALLOW_ORIGIN extends HttpHeader {val name = "Access-Control-Allow-Origin"}
-  case object SERVER extends HttpHeader {val name = "Server"}
+
+
 
   case class unknownHeader(name: String) extends HttpHeader
 
@@ -45,6 +50,9 @@ object HttpHeader {
     ACCEPT_CHARSET,
     ACCEPT_ENCODING,
     ACCEPT_LANGUAGE,
+    ACCESS_CONTROL_ALLOW_HEADERS,
+    ACCESS_CONTROL_ALLOW_METHODS,
+    ACCESS_CONTROL_ALLOW_ORIGIN,
     AUTHORIZATION,
     CACHE_CONTROL,
     CONTENT_DISPOSITION,
@@ -64,6 +72,7 @@ object HttpHeader {
     IF_UNMODIFIED_SINCE,
     LAST_MODIFIED,
     LOCATION,
+    ORIGIN,
     USER_AGENT,
     VARY,
     WWW_AUTHENTICATE,
@@ -74,7 +83,6 @@ object HttpHeader {
     X_CORRELATION_ID,
     X_VIA,
     TRANSFER_ENCODING,
-    ACCESS_CONTROL_ALLOW_ORIGIN,
     SERVER
   )
 

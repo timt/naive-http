@@ -1,8 +1,10 @@
+import scala.util.Try
+
 name := "naive-http"
 
 organization := "io.shaka"
 
-//version := Try(sys.env("LIB_VERSION")).getOrElse("1")
+version := (Try(sys.env("GITHUB_RUN_NUMBER")).getOrElse("1").toInt + 114).toString
 
 scalaVersion := "2.13.3"
 

@@ -13,9 +13,9 @@ jobs:
         uses: trilom/file-changes-action@v1.2.3
       - uses: olafurpg/setup-scala@v10
       - run: sbt clean test
-      - if: contains(file_changes.outputs.files, 'version.sbt')
+      - if: contains(steps.file_changes.outputs.files, 'version.sbt')
         uses: blended-zio/setup-gpg@v3
-      - if: contains(file_changes.outputs.files, 'version.sbt')
+      - if: contains(steps.file_changes.outputs.files, 'version.sbt')
         run: sbt ci-publish
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}

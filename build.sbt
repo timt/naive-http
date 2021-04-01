@@ -6,9 +6,9 @@ organization := "io.shaka"
 
 version := (Try(sys.env("GITHUB_RUN_NUMBER")).getOrElse("1").toInt + 114).toString
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.5"
 
-crossScalaVersions := Seq("2.12.1", "2.13.3")
+crossScalaVersions := Seq("2.12.13", "2.13.5")
 
 homepage := Some(url("https://github.com/timt/naive-http"))
 

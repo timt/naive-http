@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
 )
 
 developers := List(
-  Developer("timt", "Tim Tennant", "ttennant@gmail.com", url("https://github.com/timt"))
+  Developer("timt", "Tim Tennant", "", url("https://github.com/timt"))
 )
 
 usePgpKeyHex("timt-ci bot")

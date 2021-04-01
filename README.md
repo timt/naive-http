@@ -1,5 +1,11 @@
-naive-http  [![Build Status](https://travis-ci.org/timt/naive-http.png?branch=master)](https://travis-ci.org/timt/naive-http) [ ![Download](https://api.bintray.com/packages/timt/repo/naive-http/images/download.png) ](https://bintray.com/timt/repo/naive-http/_latestVersion)
+naive-http 
 ==========
+
+[![Build Status][badge-build]][link-build]
+[![Release Artifacts][badge-release]][link-release]
+
+[comment]: <> ([![Maven Central][badge-maven]][link-maven])
+
 A really simple http library implemented in scala with no dependencies
 
 Requirements
@@ -12,9 +18,9 @@ Client Usage
 ------------
 Add the following lines to your build.sbt
 
-    resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/"
+[comment]: <> (    resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/")
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "114C"
+    libraryDependencies += "io.shaka" %% "naive-http" % "119"
 
 Start hacking
 
@@ -85,3 +91,13 @@ see [SERVER_README.md](SERVER_README.md)
 Code license
 ------------
 Apache License 2.0
+
+[badge-build]: https://github.com/timt/naive-http/actions/workflows/build.yml/badge.svg
+[link-build]: https://github.com/timt/naive-http/actions/
+
+[badge-release]: https://img.shields.io/nexus/r/https/oss.sonatype.org/io.shaka/naive-http_2.12.svg "Sonatype Releases"
+[link-release]: https://oss.sonatype.org/content/repositories/releases/io/shaka/naive-http_2.12/ "Sonatype Releases"
+
+[comment]: <> ([badge-maven]: https://maven-badges.herokuapp.com/maven-central/io.shaka/naive-http_2.12/badge.svg)
+
+[comment]: <> ([link-maven]: https://maven-badges.herokuapp.com/maven-central/io.shaka/naive-http_2.12)

@@ -1,4 +1,0 @@
-realm = Bintray API Realm
-host = api.bintray.com
-user = $BT_USER
-password = $BT_KEY

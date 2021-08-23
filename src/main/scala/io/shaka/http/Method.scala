@@ -9,6 +9,7 @@ object Method {
   case object DELETE extends Method {val name = "DELETE"}
   case object TRACE extends Method {val name = "TRACE"}
   case object CONNECT extends Method {val name = "CONNECT"}
+  case object PATCH extends Method {val name = "PATCH"}
   case class unknownMethod(name: String) extends Method
 
   val values = List(
@@ -19,7 +20,8 @@ object Method {
     PUT,
     DELETE,
     TRACE,
-    CONNECT
+    CONNECT,
+    PATCH
   )
 
   def method(name: String) = values.find(h => h.name == name).getOrElse(unknownMethod(name))

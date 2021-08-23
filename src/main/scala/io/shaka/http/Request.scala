@@ -45,6 +45,24 @@ object Request {
 
     def unapply(req: Request): Option[String] = if (req.method == Method.OPTIONS) Some(req.url) else None
   }
+
+  object TRACE {
+    def apply(url: Url) = Request(Method.TRACE, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.TRACE) Some(req.url) else None
+  }
+
+  object CONNECT {
+    def apply(url: Url) = Request(Method.CONNECT, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.CONNECT) Some(req.url) else None
+  }
+
+  object PATCH {
+    def apply(url: Url) = Request(Method.PATCH, url)
+
+    def unapply(req: Request): Option[String] = if (req.method == Method.PATCH) Some(req.url) else None
+  }
 }
 
 case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, entity: Option[Entity] = None) {

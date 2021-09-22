@@ -17,11 +17,13 @@ object HttpHeader {
   case object CONTENT_LANGUAGE extends HttpHeader {val name = "Content-Language"}
   case object CONTENT_LENGTH extends HttpHeader {val name = "Content-Length"}
   case object CONTENT_LOCATION extends HttpHeader {val name = "Content-Location"}
+  case object CONTENT_SECURITY_POLICY extends HttpHeader {val name = "Content-Security-Policy"}
   case object CONTENT_TYPE extends HttpHeader {val name = "Content-Type"}
   case object Content_MD5 extends HttpHeader {val name = "Content-MD5"}
   case object DATE extends HttpHeader {val name = "Date"}
   case object ETAG extends HttpHeader {val name = "ETag"}
   case object EXPIRES extends HttpHeader {val name = "Expires"}
+  case object FEATURE_POLICY extends HttpHeader {val name = "Feature-Policy"}
   case object HOST extends HttpHeader {val name = "Host"}
   case object IF_MATCH extends HttpHeader {val name = "If-Match"}
   case object IF_MODIFIED_SINCE extends HttpHeader {val name = "If-Modified-Since"}
@@ -30,6 +32,7 @@ object HttpHeader {
   case object LAST_MODIFIED extends HttpHeader {val name = "Last-Modified"}
   case object LOCATION extends HttpHeader {val name = "Location"}
   case object ORIGIN extends HttpHeader {val name = "Origin"}
+  case object PRAGMA extends HttpHeader {val name = "Pragma"}
   case object SERVER extends HttpHeader {val name = "Server"}
   case object SET_COOKIE extends HttpHeader {val name = "Set-Cookie"}
   case object TRANSFER_ENCODING extends HttpHeader {val name = "Transfer-Encoding"}
@@ -60,11 +63,13 @@ object HttpHeader {
     CONTENT_LANGUAGE,
     CONTENT_LENGTH,
     CONTENT_LOCATION,
+    CONTENT_SECURITY_POLICY,
     CONTENT_TYPE,
     Content_MD5,
     DATE,
     ETAG,
     EXPIRES,
+    FEATURE_POLICY,
     HOST,
     IF_MATCH,
     IF_MODIFIED_SINCE,
@@ -73,6 +78,7 @@ object HttpHeader {
     LAST_MODIFIED,
     LOCATION,
     ORIGIN,
+    PRAGMA,
     USER_AGENT,
     VARY,
     WWW_AUTHENTICATE,

@@ -1,65 +1,65 @@
 package io.shaka.http
 
-import javax.xml.bind.DatatypeConverter.printBase64Binary
-
 import io.shaka.http.ContentType.APPLICATION_FORM_URLENCODED
 import io.shaka.http.FormParameters.{fromEntity, toEntity}
 import io.shaka.http.Http._
-import io.shaka.http.HttpHeader.{COOKIE, ACCEPT, AUTHORIZATION, CONTENT_TYPE}
+import io.shaka.http.HttpHeader.{ACCEPT, AUTHORIZATION, CONTENT_TYPE, COOKIE}
+
+import java.util.Base64
 
 
 object Request {
 
   object GET {
-    def apply(url: Url) = Request(Method.GET, url)
+    def apply(url: Url): Request = Request(Method.GET, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.GET) Some(req.url) else None
   }
 
   object POST {
-    def apply(url: Url) = Request(Method.POST, url)
+    def apply(url: Url): Request = Request(Method.POST, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.POST) Some(req.url) else None
   }
 
   object PUT {
-    def apply(url: Url) = Request(Method.PUT, url)
+    def apply(url: Url): Request = Request(Method.PUT, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.PUT) Some(req.url) else None
   }
 
   object HEAD {
-    def apply(url: Url) = Request(Method.HEAD, url)
+    def apply(url: Url): Request = Request(Method.HEAD, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.HEAD) Some(req.url) else None
   }
 
   object DELETE {
-    def apply(url: Url) = Request(Method.DELETE, url)
+    def apply(url: Url): Request = Request(Method.DELETE, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.DELETE) Some(req.url) else None
   }
 
   object OPTIONS {
-    def apply(url: Url) = Request(Method.OPTIONS, url)
+    def apply(url: Url): Request = Request(Method.OPTIONS, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.OPTIONS) Some(req.url) else None
   }
 
   object TRACE {
-    def apply(url: Url) = Request(Method.TRACE, url)
+    def apply(url: Url): Request = Request(Method.TRACE, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.TRACE) Some(req.url) else None
   }
 
   object CONNECT {
-    def apply(url: Url) = Request(Method.CONNECT, url)
+    def apply(url: Url): Request = Request(Method.CONNECT, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.CONNECT) Some(req.url) else None
   }
 
   object PATCH {
-    def apply(url: Url) = Request(Method.PATCH, url)
+    def apply(url: Url): Request = Request(Method.PATCH, url)
 
     def unapply(req: Request): Option[String] = if (req.method == Method.PATCH) Some(req.url) else None
   }
@@ -85,7 +85,7 @@ case class Request(method: Method, url: Url, headers: Headers = Headers.Empty, e
     case _ => throw new RuntimeException("There is no entity in this request! Consider using request.entity:Option[Entity] instead.")
   }
   def basicAuth(user: String, password: String): Request = {
-    header(AUTHORIZATION, "Basic " + printBase64Binary(s"$user:$password".getBytes))
+    header(AUTHORIZATION, "Basic " + Base64.getEncoder.encodeToString(s"$user:$password".getBytes))
   }
   def cookie(cookie: Cookie): Request = header(COOKIE, cookie.toSetCookie)
 

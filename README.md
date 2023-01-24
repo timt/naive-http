@@ -20,7 +20,7 @@ Add the following lines to your build.sbt
 
 [comment]: <> (    resolvers += "Tim Tennant's repo" at "http://dl.bintray.com/timt/repo/")
 
-    libraryDependencies += "io.shaka" %% "naive-http" % "124"
+    libraryDependencies += "io.shaka" %% "naive-http" % "125"
 
 Start hacking
 

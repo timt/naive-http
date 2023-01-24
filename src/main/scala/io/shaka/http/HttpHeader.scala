@@ -35,6 +35,7 @@ object HttpHeader {
   case object PRAGMA extends HttpHeader {val name = "Pragma"}
   case object SERVER extends HttpHeader {val name = "Server"}
   case object SET_COOKIE extends HttpHeader {val name = "Set-Cookie"}
+  case object STRICT_TRANSPORT_SECURITY extends HttpHeader {val name = "Strict-Transport-Security"}
   case object TRANSFER_ENCODING extends HttpHeader {val name = "Transfer-Encoding"}
   case object USER_AGENT extends HttpHeader {val name = "User-Agent"}
   case object VARY extends HttpHeader {val name = "Vary"}
@@ -84,6 +85,7 @@ object HttpHeader {
     WWW_AUTHENTICATE,
     COOKIE,
     SET_COOKIE,
+    STRICT_TRANSPORT_SECURITY,
     X_FORWARDED_FOR,
     X_FORWARDED_PROTO,
     X_CORRELATION_ID,

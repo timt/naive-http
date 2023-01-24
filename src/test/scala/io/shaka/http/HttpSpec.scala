@@ -43,8 +43,8 @@ class HttpSpec extends FunSuite with BeforeAndAfterAll with BeforeAndAfterEach {
 
   test("response gets headers with many values") {
     withServer{ server =>
-      server.addResponseHeader(ETAG, "cheese")
       server.addResponseHeader(ETAG, "sheep")
+      server.addResponseHeader(ETAG, "cheese")
       val response = http(GET(server.toUrl("returnManyHeaders")))
       assert(response.headers(ETAG) === List("cheese", "sheep"))
     }
